@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package retrieve;
+
+option go_package = "./retrieve";
+
+import "retrieve/rpc/msg.proto";
+
+// Retrieve 文档检索服务
+service Retrieve {
+  rpc Version(VersionReq) returns (VersionResp);
+  rpc CreateDoc(DocumentCreateReq) returns (DocumentCreateResp);
+  rpc Search(SearchReq) returns (SearchResp);
+}

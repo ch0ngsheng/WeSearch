@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package retrieve;
+
+option go_package = "./userdocument";
+
+import "userdocument/rpc/msg.proto";
+
+service UserDocument {
+  rpc Version(VersionReq) returns (VersionResp); // 服务版本
+  rpc CreateDoc(DocumentCollectReq) returns (DocumentCollectResp); // 用户创建文档
+  rpc SearchDoc(DocumentSearchReq) returns (DocumentSearchResp); // 用户检索文档
+  rpc FindUserDoc(FindUserDocReq) returns (FindUserDocResp); // 查询用户文档
+}
