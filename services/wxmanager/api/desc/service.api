@@ -1,0 +1,23 @@
+syntax = "v1"
+
+import "msg.api"
+
+@server(
+	prefix: v1
+	group: wx
+)
+service manager {
+	@doc "get version"
+	@handler version
+	get /version returns (VersionResp)
+}
+
+@server(
+	prefix: v1/wx
+	group: wx
+)
+service manager {
+	@doc "wechat message"
+	@handler MessageWithRawHTTP
+	post /message
+}
