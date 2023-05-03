@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.30.0
 // 	protoc        v3.11.2
-// source: rpc/service.proto
+// source: rpc/userdoc.proto
 
 package pb
 
@@ -31,7 +31,7 @@ type VersionReq struct {
 func (x *VersionReq) Reset() {
 	*x = VersionReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_service_proto_msgTypes[0]
+		mi := &file_rpc_userdoc_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -44,7 +44,7 @@ func (x *VersionReq) String() string {
 func (*VersionReq) ProtoMessage() {}
 
 func (x *VersionReq) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_service_proto_msgTypes[0]
+	mi := &file_rpc_userdoc_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +57,7 @@ func (x *VersionReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VersionReq.ProtoReflect.Descriptor instead.
 func (*VersionReq) Descriptor() ([]byte, []int) {
-	return file_rpc_service_proto_rawDescGZIP(), []int{0}
+	return file_rpc_userdoc_proto_rawDescGZIP(), []int{0}
 }
 
 type VersionResp struct {
@@ -71,7 +71,7 @@ type VersionResp struct {
 func (x *VersionResp) Reset() {
 	*x = VersionResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_service_proto_msgTypes[1]
+		mi := &file_rpc_userdoc_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -84,7 +84,7 @@ func (x *VersionResp) String() string {
 func (*VersionResp) ProtoMessage() {}
 
 func (x *VersionResp) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_service_proto_msgTypes[1]
+	mi := &file_rpc_userdoc_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -97,7 +97,7 @@ func (x *VersionResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VersionResp.ProtoReflect.Descriptor instead.
 func (*VersionResp) Descriptor() ([]byte, []int) {
-	return file_rpc_service_proto_rawDescGZIP(), []int{1}
+	return file_rpc_userdoc_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *VersionResp) GetVersion() string {
@@ -120,7 +120,7 @@ type DocumentCollectReq struct {
 func (x *DocumentCollectReq) Reset() {
 	*x = DocumentCollectReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_service_proto_msgTypes[2]
+		mi := &file_rpc_userdoc_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -133,7 +133,7 @@ func (x *DocumentCollectReq) String() string {
 func (*DocumentCollectReq) ProtoMessage() {}
 
 func (x *DocumentCollectReq) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_service_proto_msgTypes[2]
+	mi := &file_rpc_userdoc_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -146,7 +146,7 @@ func (x *DocumentCollectReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DocumentCollectReq.ProtoReflect.Descriptor instead.
 func (*DocumentCollectReq) Descriptor() ([]byte, []int) {
-	return file_rpc_service_proto_rawDescGZIP(), []int{2}
+	return file_rpc_userdoc_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *DocumentCollectReq) GetWxUID() string {
@@ -172,7 +172,7 @@ type DocumentCollectResp struct {
 func (x *DocumentCollectResp) Reset() {
 	*x = DocumentCollectResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_service_proto_msgTypes[3]
+		mi := &file_rpc_userdoc_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -185,7 +185,7 @@ func (x *DocumentCollectResp) String() string {
 func (*DocumentCollectResp) ProtoMessage() {}
 
 func (x *DocumentCollectResp) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_service_proto_msgTypes[3]
+	mi := &file_rpc_userdoc_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -198,7 +198,7 @@ func (x *DocumentCollectResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DocumentCollectResp.ProtoReflect.Descriptor instead.
 func (*DocumentCollectResp) Descriptor() ([]byte, []int) {
-	return file_rpc_service_proto_rawDescGZIP(), []int{3}
+	return file_rpc_userdoc_proto_rawDescGZIP(), []int{3}
 }
 
 // 检索文档
@@ -217,7 +217,7 @@ type DocItem struct {
 func (x *DocItem) Reset() {
 	*x = DocItem{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_service_proto_msgTypes[4]
+		mi := &file_rpc_userdoc_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -230,7 +230,7 @@ func (x *DocItem) String() string {
 func (*DocItem) ProtoMessage() {}
 
 func (x *DocItem) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_service_proto_msgTypes[4]
+	mi := &file_rpc_userdoc_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -243,7 +243,7 @@ func (x *DocItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DocItem.ProtoReflect.Descriptor instead.
 func (*DocItem) Descriptor() ([]byte, []int) {
-	return file_rpc_service_proto_rawDescGZIP(), []int{4}
+	return file_rpc_userdoc_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *DocItem) GetDocID() string {
@@ -293,7 +293,7 @@ type DocumentSearchReq struct {
 func (x *DocumentSearchReq) Reset() {
 	*x = DocumentSearchReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_service_proto_msgTypes[5]
+		mi := &file_rpc_userdoc_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -306,7 +306,7 @@ func (x *DocumentSearchReq) String() string {
 func (*DocumentSearchReq) ProtoMessage() {}
 
 func (x *DocumentSearchReq) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_service_proto_msgTypes[5]
+	mi := &file_rpc_userdoc_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -319,7 +319,7 @@ func (x *DocumentSearchReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DocumentSearchReq.ProtoReflect.Descriptor instead.
 func (*DocumentSearchReq) Descriptor() ([]byte, []int) {
-	return file_rpc_service_proto_rawDescGZIP(), []int{5}
+	return file_rpc_userdoc_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *DocumentSearchReq) GetWxUID() string {
@@ -348,7 +348,7 @@ type DocumentSearchResp struct {
 func (x *DocumentSearchResp) Reset() {
 	*x = DocumentSearchResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_service_proto_msgTypes[6]
+		mi := &file_rpc_userdoc_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -361,7 +361,7 @@ func (x *DocumentSearchResp) String() string {
 func (*DocumentSearchResp) ProtoMessage() {}
 
 func (x *DocumentSearchResp) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_service_proto_msgTypes[6]
+	mi := &file_rpc_userdoc_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -374,7 +374,7 @@ func (x *DocumentSearchResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DocumentSearchResp.ProtoReflect.Descriptor instead.
 func (*DocumentSearchResp) Descriptor() ([]byte, []int) {
-	return file_rpc_service_proto_rawDescGZIP(), []int{6}
+	return file_rpc_userdoc_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *DocumentSearchResp) GetWxUID() string {
@@ -406,7 +406,7 @@ type FindDocInfo struct {
 func (x *FindDocInfo) Reset() {
 	*x = FindDocInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_service_proto_msgTypes[7]
+		mi := &file_rpc_userdoc_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -419,7 +419,7 @@ func (x *FindDocInfo) String() string {
 func (*FindDocInfo) ProtoMessage() {}
 
 func (x *FindDocInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_service_proto_msgTypes[7]
+	mi := &file_rpc_userdoc_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -432,7 +432,7 @@ func (x *FindDocInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FindDocInfo.ProtoReflect.Descriptor instead.
 func (*FindDocInfo) Descriptor() ([]byte, []int) {
-	return file_rpc_service_proto_rawDescGZIP(), []int{7}
+	return file_rpc_userdoc_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *FindDocInfo) GetDocID() string {
@@ -474,7 +474,7 @@ type FindUserDocReq struct {
 func (x *FindUserDocReq) Reset() {
 	*x = FindUserDocReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_service_proto_msgTypes[8]
+		mi := &file_rpc_userdoc_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -487,7 +487,7 @@ func (x *FindUserDocReq) String() string {
 func (*FindUserDocReq) ProtoMessage() {}
 
 func (x *FindUserDocReq) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_service_proto_msgTypes[8]
+	mi := &file_rpc_userdoc_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -500,7 +500,7 @@ func (x *FindUserDocReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FindUserDocReq.ProtoReflect.Descriptor instead.
 func (*FindUserDocReq) Descriptor() ([]byte, []int) {
-	return file_rpc_service_proto_rawDescGZIP(), []int{8}
+	return file_rpc_userdoc_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *FindUserDocReq) GetWxUID() string {
@@ -522,7 +522,7 @@ type FindUserDocResp struct {
 func (x *FindUserDocResp) Reset() {
 	*x = FindUserDocResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_rpc_service_proto_msgTypes[9]
+		mi := &file_rpc_userdoc_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -535,7 +535,7 @@ func (x *FindUserDocResp) String() string {
 func (*FindUserDocResp) ProtoMessage() {}
 
 func (x *FindUserDocResp) ProtoReflect() protoreflect.Message {
-	mi := &file_rpc_service_proto_msgTypes[9]
+	mi := &file_rpc_userdoc_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -548,7 +548,7 @@ func (x *FindUserDocResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FindUserDocResp.ProtoReflect.Descriptor instead.
 func (*FindUserDocResp) Descriptor() ([]byte, []int) {
-	return file_rpc_service_proto_rawDescGZIP(), []int{9}
+	return file_rpc_userdoc_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *FindUserDocResp) GetWxUID() string {
@@ -565,10 +565,10 @@ func (x *FindUserDocResp) GetList() []*FindDocInfo {
 	return nil
 }
 
-var File_rpc_service_proto protoreflect.FileDescriptor
+var File_rpc_userdoc_proto protoreflect.FileDescriptor
 
-var file_rpc_service_proto_rawDesc = []byte{
-	0x0a, 0x11, 0x72, 0x70, 0x63, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x70, 0x72,
+var file_rpc_userdoc_proto_rawDesc = []byte{
+	0x0a, 0x11, 0x72, 0x70, 0x63, 0x2f, 0x75, 0x73, 0x65, 0x72, 0x64, 0x6f, 0x63, 0x2e, 0x70, 0x72,
 	0x6f, 0x74, 0x6f, 0x12, 0x0c, 0x75, 0x73, 0x65, 0x72, 0x64, 0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e,
 	0x74, 0x1a, 0x1f, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
 	0x75, 0x66, 0x2f, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x2e, 0x70, 0x72, 0x6f,
@@ -642,19 +642,19 @@ var file_rpc_service_proto_rawDesc = []byte{
 }
 
 var (
-	file_rpc_service_proto_rawDescOnce sync.Once
-	file_rpc_service_proto_rawDescData = file_rpc_service_proto_rawDesc
+	file_rpc_userdoc_proto_rawDescOnce sync.Once
+	file_rpc_userdoc_proto_rawDescData = file_rpc_userdoc_proto_rawDesc
 )
 
-func file_rpc_service_proto_rawDescGZIP() []byte {
-	file_rpc_service_proto_rawDescOnce.Do(func() {
-		file_rpc_service_proto_rawDescData = protoimpl.X.CompressGZIP(file_rpc_service_proto_rawDescData)
+func file_rpc_userdoc_proto_rawDescGZIP() []byte {
+	file_rpc_userdoc_proto_rawDescOnce.Do(func() {
+		file_rpc_userdoc_proto_rawDescData = protoimpl.X.CompressGZIP(file_rpc_userdoc_proto_rawDescData)
 	})
-	return file_rpc_service_proto_rawDescData
+	return file_rpc_userdoc_proto_rawDescData
 }
 
-var file_rpc_service_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
-var file_rpc_service_proto_goTypes = []interface{}{
+var file_rpc_userdoc_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_rpc_userdoc_proto_goTypes = []interface{}{
 	(*VersionReq)(nil),          // 0: userdocument.VersionReq
 	(*VersionResp)(nil),         // 1: userdocument.VersionResp
 	(*DocumentCollectReq)(nil),  // 2: userdocument.DocumentCollectReq
@@ -667,7 +667,7 @@ var file_rpc_service_proto_goTypes = []interface{}{
 	(*FindUserDocResp)(nil),     // 9: userdocument.FindUserDocResp
 	(*timestamp.Timestamp)(nil), // 10: google.protobuf.Timestamp
 }
-var file_rpc_service_proto_depIdxs = []int32{
+var file_rpc_userdoc_proto_depIdxs = []int32{
 	10, // 0: userdocument.DocItem.CollectTime:type_name -> google.protobuf.Timestamp
 	4,  // 1: userdocument.DocumentSearchResp.List:type_name -> userdocument.DocItem
 	10, // 2: userdocument.FindDocInfo.CollectTime:type_name -> google.protobuf.Timestamp
@@ -687,13 +687,13 @@ var file_rpc_service_proto_depIdxs = []int32{
 	0,  // [0:4] is the sub-list for field type_name
 }
 
-func init() { file_rpc_service_proto_init() }
-func file_rpc_service_proto_init() {
-	if File_rpc_service_proto != nil {
+func init() { file_rpc_userdoc_proto_init() }
+func file_rpc_userdoc_proto_init() {
+	if File_rpc_userdoc_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_rpc_service_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_rpc_userdoc_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*VersionReq); i {
 			case 0:
 				return &v.state
@@ -705,7 +705,7 @@ func file_rpc_service_proto_init() {
 				return nil
 			}
 		}
-		file_rpc_service_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_rpc_userdoc_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*VersionResp); i {
 			case 0:
 				return &v.state
@@ -717,7 +717,7 @@ func file_rpc_service_proto_init() {
 				return nil
 			}
 		}
-		file_rpc_service_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+		file_rpc_userdoc_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DocumentCollectReq); i {
 			case 0:
 				return &v.state
@@ -729,7 +729,7 @@ func file_rpc_service_proto_init() {
 				return nil
 			}
 		}
-		file_rpc_service_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+		file_rpc_userdoc_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DocumentCollectResp); i {
 			case 0:
 				return &v.state
@@ -741,7 +741,7 @@ func file_rpc_service_proto_init() {
 				return nil
 			}
 		}
-		file_rpc_service_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_rpc_userdoc_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DocItem); i {
 			case 0:
 				return &v.state
@@ -753,7 +753,7 @@ func file_rpc_service_proto_init() {
 				return nil
 			}
 		}
-		file_rpc_service_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+		file_rpc_userdoc_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DocumentSearchReq); i {
 			case 0:
 				return &v.state
@@ -765,7 +765,7 @@ func file_rpc_service_proto_init() {
 				return nil
 			}
 		}
-		file_rpc_service_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+		file_rpc_userdoc_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DocumentSearchResp); i {
 			case 0:
 				return &v.state
@@ -777,7 +777,7 @@ func file_rpc_service_proto_init() {
 				return nil
 			}
 		}
-		file_rpc_service_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+		file_rpc_userdoc_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*FindDocInfo); i {
 			case 0:
 				return &v.state
@@ -789,7 +789,7 @@ func file_rpc_service_proto_init() {
 				return nil
 			}
 		}
-		file_rpc_service_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+		file_rpc_userdoc_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*FindUserDocReq); i {
 			case 0:
 				return &v.state
@@ -801,7 +801,7 @@ func file_rpc_service_proto_init() {
 				return nil
 			}
 		}
-		file_rpc_service_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+		file_rpc_userdoc_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*FindUserDocResp); i {
 			case 0:
 				return &v.state
@@ -818,18 +818,18 @@ func file_rpc_service_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_rpc_service_proto_rawDesc,
+			RawDescriptor: file_rpc_userdoc_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_rpc_service_proto_goTypes,
-		DependencyIndexes: file_rpc_service_proto_depIdxs,
-		MessageInfos:      file_rpc_service_proto_msgTypes,
+		GoTypes:           file_rpc_userdoc_proto_goTypes,
+		DependencyIndexes: file_rpc_userdoc_proto_depIdxs,
+		MessageInfos:      file_rpc_userdoc_proto_msgTypes,
 	}.Build()
-	File_rpc_service_proto = out.File
-	file_rpc_service_proto_rawDesc = nil
-	file_rpc_service_proto_goTypes = nil
-	file_rpc_service_proto_depIdxs = nil
+	File_rpc_userdoc_proto = out.File
+	file_rpc_userdoc_proto_rawDesc = nil
+	file_rpc_userdoc_proto_goTypes = nil
+	file_rpc_userdoc_proto_depIdxs = nil
 }
