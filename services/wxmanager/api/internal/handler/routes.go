@@ -29,6 +29,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/message",
 				Handler: wx.MessageWithRawHTTPHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/message",
+				Handler: wx.WeChatValidationWithRawHTTPHandler(serverCtx),
+			},
 		},
 		rest.WithPrefix("/v1/wx"),
 	)

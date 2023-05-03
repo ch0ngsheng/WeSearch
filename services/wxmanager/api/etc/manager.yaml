@@ -1,3 +1,9 @@
 Name: manager
 Host: 0.0.0.0
-Port: 8888
+Port: 7001
+
+WeChat:
+  AppID:
+  AppSecret:
+  Token:
+  EncodingAESKey:

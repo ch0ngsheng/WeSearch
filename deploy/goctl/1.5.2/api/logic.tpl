@@ -1,9 +1,8 @@
 package {{.pkgName}}
 
 {{ $isRawHTTPHandler := false }}
-{{ if eq "MessageWithRawHTTP" .function }}
-{{ $isRawHTTPHandler = true }}
-{{ end }}
+{{ if eq "MessageWithRawHTTP" .function }}{{ $isRawHTTPHandler = true }}{{ end }}
+{{ if eq "WeChatValidationWithRawHTTP" .function }}{{ $isRawHTTPHandler = true }}{{ end }}
 import (
     {{ if $isRawHTTPHandler }}"net/http"{{ end }}
 	{{.imports}}

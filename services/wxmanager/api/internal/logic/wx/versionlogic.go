@@ -1,10 +1,9 @@
 package wx
 
 import (
-	"context"
-
 	"chongsheng.art/wesearch/services/wxmanager/api/internal/svc"
 	"chongsheng.art/wesearch/services/wxmanager/api/internal/types"
+	"context"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,7 +23,6 @@ func NewVersionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *VersionLo
 }
 
 func (l *VersionLogic) Version() (resp *types.VersionResp, err error) {
-	// todo: add your logic here and delete this line
-
+	resp = &types.VersionResp{Version: "0.0.1"}
 	return
 }

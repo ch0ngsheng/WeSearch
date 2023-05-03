@@ -1,5 +1,6 @@
 package {{.PkgName}}
 {{ $isRawHTTPHandler := false }}{{ if eq "MessageWithRawHTTPHandler" .HandlerName }}{{ $isRawHTTPHandler = true }}{{ end }}
+{{ if eq "WeChatValidationWithRawHTTPHandler" .HandlerName }}{{ $isRawHTTPHandler = true }}{{ end }}
 import (
 	"net/http"
 	{{ if not $isRawHTTPHandler }}"github.com/zeromicro/go-zero/rest/httpx"{{ end }}
