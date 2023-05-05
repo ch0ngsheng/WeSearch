@@ -1,5 +1,3 @@
-*.crt
-*.key
 *.log
 *.sum
 .idea/*

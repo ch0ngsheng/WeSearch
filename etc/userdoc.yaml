@@ -1,0 +1,14 @@
+Name: userdoc.rpc
+ListenOn: 0.0.0.0:7002
+#Etcd:
+#  Hosts:
+  #  - 127.0.0.1:2379
+  #Key: userdoc.rpc
+  #  CertFile: certs/etcd-ca.crt
+  #CertKeyFile: certs/etcd-client.key
+  #CACertFile: certs/etcd-ca.crt
+#InsecureSkipVerify: false
+#DB:
+#  DataSource: root:PXDN93VRKUm8TeE7@tcp(mysql:3306)/looklook_payment?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+Kafka:
+
