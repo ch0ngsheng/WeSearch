@@ -1,5 +1,6 @@
 # Image URL to use all building/pushing image targets
 IMGManager ?= yuchsh/wesearch-manager:latest
+IMGUserDoc ?= yuchsh/wesearch-userdoc:latest
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 ifeq (,$(shell go env GOBIN))
@@ -51,9 +52,13 @@ build: fmt ## Build manager binary.
 run: fmt vet ## Run a controller from your host.
 	go run services/wxmanager/api/manager.go
 
-.PHONY: docker-build
+.PHONY: docker-build-manager
 docker-build: ## Build docker image with the manager.
 	docker build -t ${IMGManager} -f services/wxmanager/api/Dockerfile .
+
+.PHONY: docker-build-userdoc
+docker-build: ## Build docker image with the manager.
+	docker build -t ${IMGUserDoc} -f services/userdocument/api/Dockerfile .
 
 .PHONY: docker-push
 docker-push: ## Push docker image with the manager.

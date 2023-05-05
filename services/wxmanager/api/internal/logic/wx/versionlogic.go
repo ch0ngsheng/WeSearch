@@ -1,11 +1,14 @@
 package wx
 
 import (
-	"chongsheng.art/wesearch/services/wxmanager/api/internal/svc"
-	"chongsheng.art/wesearch/services/wxmanager/api/internal/types"
 	"context"
+	"log"
 
 	"github.com/zeromicro/go-zero/core/logx"
+
+	"chongsheng.art/wesearch/services/userdocument/rpc/userdocument"
+	"chongsheng.art/wesearch/services/wxmanager/api/internal/svc"
+	"chongsheng.art/wesearch/services/wxmanager/api/internal/types"
 )
 
 type VersionLogic struct {
@@ -23,6 +26,11 @@ func NewVersionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *VersionLo
 }
 
 func (l *VersionLogic) Version() (resp *types.VersionResp, err error) {
-	resp = &types.VersionResp{Version: "0.0.1"}
-	return
+	res, err := l.svcCtx.UserDocRpc.Version(l.ctx, &userdocument.VersionReq{})
+	if err != nil {
+		log.Printf("rpc request Version, %v\n", err)
+		return nil, err
+	}
+	resp = &types.VersionResp{Version: res.Version}
+	return resp, nil
 }

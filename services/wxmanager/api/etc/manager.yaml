@@ -7,3 +7,18 @@ WeChat:
   AppSecret:
   Token:
   EncodingAESKey:
+
+UserDocRpcConf:
+  Etcd:
+    Hosts:
+      - 1.etcd:2379
+    Key: userdoc.rpc
+    CertFile: certs/ca.crt
+    CertKeyFile: certs/etcd-client.key
+    CACertFile: certs/etcd-ca.crt
+    InsecureSkipVerify: false
+
+WeSearch:
+  KeyPrefix:
+    UrlCollector: https://mp.weixin.qq.com/s/
+    UrlQuery: 搜索

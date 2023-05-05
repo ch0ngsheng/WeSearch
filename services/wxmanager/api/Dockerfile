@@ -16,7 +16,6 @@ ADD go.mod .
 ADD go.sum .
 RUN go mod download
 COPY . .
-COPY services/wxmanager/api/etc /app/etc
 RUN go build -ldflags="-s -w" -o /app/wesearch-manager services/wxmanager/api/manager.go
 
 
@@ -28,6 +27,6 @@ ENV TZ Asia/Shanghai
 
 WORKDIR /app
 COPY --from=builder /app/wesearch-manager /app/wesearch-manager
-COPY --from=builder /app/etc /app/etc
+COPY --from=builder /build/etc /app/etc
 
 CMD ["./wesearch-manager", "-f", "etc/manager.yaml"]

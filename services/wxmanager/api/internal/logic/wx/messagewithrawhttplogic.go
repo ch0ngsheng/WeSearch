@@ -31,11 +31,8 @@ func (l *MessageWithRawHTTPLogic) MessageWithRawHTTP(w http.ResponseWriter, r *h
 	server := l.svcCtx.WeChatAccount.OfficialAccount.GetServer(r, w)
 	server.SkipValidate(true)
 	server.SetMessageHandler(func(msg *message.MixMessage) *message.Reply {
-		//回复消息：演示回复用户发送的消息
-		log.Printf("recv: %s\n", msg.Content)
-		text := message.NewText(msg.Content)
-		log.Println(text)
-		return &message.Reply{MsgType: message.MsgTypeText, MsgData: text}
+		// 实际处理消息
+		return l.svcCtx.WxMsgHandler.Do(msg)
 	})
 
 	//处理消息接收以及回复
