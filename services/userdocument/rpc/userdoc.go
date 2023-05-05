@@ -1,6 +1,7 @@
 package main
 
 import (
+	"chongsheng.art/wesearch/services/userdocument/message"
 	"flag"
 	"fmt"
 
@@ -33,6 +34,9 @@ func main() {
 		}
 	})
 	defer s.Stop()
+
+	// 消息处理
+	message.MustNewWorker(c.Kafka, message.ReadMessage)
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()

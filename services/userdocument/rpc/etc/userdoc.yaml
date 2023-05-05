@@ -1,6 +1,18 @@
 Name: userdoc.rpc
-ListenOn: 0.0.0.0:8080
+ListenOn: 0.0.0.0:7002
+Version: 0.0.1
 Etcd:
   Hosts:
-  - 127.0.0.1:2379
+  - 1.etcd:2379
   Key: userdoc.rpc
+  CertFile: certs/ca.crt
+  CertKeyFile: certs/etcd-client.key
+  CACertFile: certs/etcd-ca.crt
+  InsecureSkipVerify: false
+DB:
+  DataSource: root:123456@tcp(mysql:3306)/wesearch?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+Kafka:
+  Brokers:
+    - 1.kafka:9092
+  Topic: wesearch
+  ConsumerGroup: userdoc
