@@ -1,0 +1,41 @@
+package esutil
+
+import (
+	"context"
+	"crypto/tls"
+	"log"
+	"net"
+	"net/http"
+	"time"
+
+	"github.com/elastic/go-elasticsearch/v8"
+)
+
+type Retriever interface {
+	CreateDoc(context.Context, *CreateDocReq) error
+	Search(context.Context, *SearchDocReq) (*SearchDocResp, error)
+}
+
+func MustNewRetriever(addr []string, apiKey string, index string) Retriever {
+	config := elasticsearch.Config{
+		Addresses: addr,
+		APIKey:    apiKey,
+		Transport: &http.Transport{
+			MaxIdleConnsPerHost:   10,
+			ResponseHeaderTimeout: time.Second,
+			DialContext: (&net.Dialer{
+				Timeout:   30 * time.Second,
+				KeepAlive: 30 * time.Second,
+			}).DialContext,
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: true, // self-signed certificate
+			},
+		},
+	}
+
+	es, err := elasticsearch.NewTypedClient(config)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return &esClient{client: es, index: index}
+}
