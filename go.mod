@@ -12,7 +12,9 @@ require (
 )
 
 require (
+	github.com/PuerkitoBio/goquery v1.8.1 // indirect
 	github.com/Shopify/sarama v1.38.1 // indirect
+	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bradfitz/gomemcache v0.0.0-20220106215444-fb4bf637b56d // indirect
 	github.com/cenkalti/backoff/v4 v4.2.0 // indirect

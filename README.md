@@ -14,7 +14,7 @@
                                  rpc retrieve |                         | 
                                               |                         |
        -----------------                -------------   -----------------
-       | elasticsearch |   <- store-    | retriever |      <- doc url -
+       | elasticsearch |   <- store -   | retriever |      <- doc url -
        | elasticsearch |  -retrieve ->  | retriever |      - abstract ->
        -----------------                -------------
 
