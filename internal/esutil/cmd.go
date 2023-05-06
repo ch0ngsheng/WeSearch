@@ -31,7 +31,11 @@ type SearchDocReq struct {
 }
 
 type SearchDocResp struct {
-	DocIDList []string
+	DocIDList []*SearchDocItem
+}
+type SearchDocItem struct {
+	DocID string
+	Score float32
 }
 
 type esClient struct {
@@ -143,10 +147,14 @@ func buildMatchPhrase(req *SearchDocReq) []types.Query {
 	return res
 }
 
-func buildRespDocIDList(resp *searchResp) []string {
-	res := make([]string, 0, len(resp.Hits.Hits))
+func buildRespDocIDList(resp *searchResp) []*SearchDocItem {
+	res := make([]*SearchDocItem, 0, len(resp.Hits.Hits))
 	for _, r := range resp.Hits.Hits {
-		res = append(res, r.Id)
+		item := &SearchDocItem{
+			DocID: r.Id,
+			Score: r.Score,
+		}
+		res = append(res, item)
 	}
 	return res
 }

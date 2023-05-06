@@ -9,6 +9,7 @@ import (
 
 type Config struct {
 	zrpc.RpcServerConf
+	Version string
 
 	Kafka message.KafkaConfig
 

@@ -1,5 +1,6 @@
 Name: retrieve.rpc
-ListenOn: 0.0.0.0:8080
+ListenOn: 0.0.0.0:7003
+Version: 0.0.1
 Etcd:
   Hosts:
     - 1.etcd:2379
@@ -14,7 +15,7 @@ Kafka:
     - 1.kafka:9092
   TopicCreateDoc: create-doc
   TopicParseDoc: parse-doc
-  ConsumerGroup: userdoc
+  ConsumerGroup: retriever
 
 Elasticsearch:
   Addresses:

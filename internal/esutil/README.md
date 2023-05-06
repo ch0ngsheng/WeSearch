@@ -1,7 +1,7 @@
 # ES command
 ```shell
-PUT wxindex
-PUT wxindex/_mapping
+PUT wesearch
+PUT wesearch/_mapping
 {
     "_source": {
       "enabled": false
@@ -13,16 +13,17 @@ PUT wxindex/_mapping
       }
     }
 }
+GET wesearch
 
-GET wxindex/_search
+GET wesearch/_search
 
-POST wxindex/_doc/1001
+POST wesearch/_doc/1001
 {
   "content":"some content"
 }
 
 {
-  "_index": "wxindex",
+  "_index": "wesearch",
   "_id": "1005",
   "_version": 1,
   "result": "created",
@@ -35,7 +36,7 @@ POST wxindex/_doc/1001
   "_primary_term": 1
 }
 
-GET wxindex/_search
+GET wesearch/_search
 {
   "query": {
     "bool": {
@@ -68,12 +69,12 @@ GET wxindex/_search
     "max_score": 4.8995247,
     "hits": [
       {
-        "_index": "wxindex",
+        "_index": "wesearch",
         "_id": "1003",
         "_score": 4.8995247
       },
       {
-        "_index": "wxindex",
+        "_index": "wesearch",
         "_id": "1004",
         "_score": 2.1943364
       }

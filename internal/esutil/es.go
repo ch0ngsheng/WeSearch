@@ -18,5 +18,5 @@ type searchResp struct {
 
 type searchRespHit struct {
 	Id    string  `json:"_id"`
-	Score float64 `json:"_score"`
+	Score float32 `json:"_score"`
 }

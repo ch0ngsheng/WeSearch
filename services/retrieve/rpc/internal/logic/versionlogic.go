@@ -24,7 +24,6 @@ func NewVersionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *VersionLo
 }
 
 func (l *VersionLogic) Version(in *pb.VersionReq) (*pb.VersionResp, error) {
-	// todo: add your logic here and delete this line
 
-	return &pb.VersionResp{}, nil
+	return &pb.VersionResp{Version: l.svcCtx.Config.Version}, nil
 }
