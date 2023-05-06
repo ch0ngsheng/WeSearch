@@ -1,6 +1,7 @@
 package main
 
 import (
+	"chongsheng.art/wesearch/services/retrieve/rpc/internal/mqmsg"
 	"flag"
 	"fmt"
 
@@ -33,6 +34,9 @@ func main() {
 		}
 	})
 	defer s.Stop()
+
+	// 消息消费
+	mqmsg.MustStartConsumer(c.Kafka, mqmsg.NewConsumer(ctx).ReadCreateDocMessage)
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()

@@ -9,15 +9,20 @@ import (
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 
 	"chongsheng.art/wesearch/internal/message"
+	"chongsheng.art/wesearch/internal/mq"
 	"chongsheng.art/wesearch/services/userdocument/model"
 	"chongsheng.art/wesearch/services/userdocument/rpc/internal/svc"
 )
+
+type Consumer interface {
+	ReadDocAnalysisMessage(data []byte) error
+}
 
 type docAnalysis struct {
 	svcCtx *svc.ServiceContext
 }
 
-func NewConsumer(svcCtx *svc.ServiceContext) Consumer {
+func NewConsumerObj(svcCtx *svc.ServiceContext) Consumer {
 	return docAnalysis{svcCtx: svcCtx}
 }
 
@@ -45,4 +50,12 @@ func (d docAnalysis) ReadDocAnalysisMessage(data []byte) error {
 	}
 
 	return nil
+}
+
+func MustStartConsumer(cfg message.KafkaConfig, fn func(msg []byte) error) {
+	consumer := mq.MustNewMqConsumer(cfg.Brokers)
+
+	go func() {
+		consumer.Consume(cfg.ConsumerGroup, cfg.TopicParseDoc, fn)
+	}()
 }

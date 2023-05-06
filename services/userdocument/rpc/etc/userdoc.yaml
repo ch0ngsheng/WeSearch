@@ -14,13 +14,14 @@ DB:
 Kafka:
   Brokers:
     - 1.kafka:9092
-  Topic: wesearch
+  TopicCreateDoc: create-doc
+  TopicParseDoc: parse-doc
   ConsumerGroup: userdoc
 RetrieveRpcConf:
   Etcd:
     Hosts:
       - 1.etcd:2379
-    Key: userdoc.rpc
+    Key: retrieve.rpc
     CertFile: certs/ca.crt
     CertKeyFile: certs/etcd-client.key
     CACertFile: certs/etcd-ca.crt

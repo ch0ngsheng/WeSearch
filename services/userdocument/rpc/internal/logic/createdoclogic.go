@@ -55,7 +55,7 @@ func (l *CreateDocLogic) CreateDoc(in *pb.DocumentCollectReq) (*pb.DocumentColle
 		if err != nil {
 			return err
 		}
-		return l.svcCtx.Producer.Send(l.svcCtx.Config.Kafka.Topic, msg)
+		return l.svcCtx.Producer.Send(l.svcCtx.Config.Kafka.TopicCreateDoc, msg)
 	},
 	)
 

@@ -10,7 +10,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	"chongsheng.art/wesearch/internal/message"
 	"chongsheng.art/wesearch/services/userdocument/rpc/internal/config"
 	"chongsheng.art/wesearch/services/userdocument/rpc/internal/mqmsg"
 	"chongsheng.art/wesearch/services/userdocument/rpc/internal/server"
@@ -37,7 +36,7 @@ func main() {
 	defer s.Stop()
 
 	// 消息处理
-	message.MustNewWorker(c.Kafka, mqmsg.NewConsumer(ctx).ReadDocAnalysisMessage)
+	mqmsg.MustStartConsumer(c.Kafka, mqmsg.NewConsumerObj(ctx).ReadDocAnalysisMessage)
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()

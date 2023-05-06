@@ -1,6 +1,24 @@
-Name: service.rpc
+Name: retrieve.rpc
 ListenOn: 0.0.0.0:8080
 Etcd:
   Hosts:
-  - 127.0.0.1:2379
-  Key: service.rpc
+    - 1.etcd:2379
+  Key: retrieve.rpc
+  CertFile: certs/ca.crt
+  CertKeyFile: certs/etcd-client.key
+  CACertFile: certs/etcd-ca.crt
+  InsecureSkipVerify: false
+
+Kafka:
+  Brokers:
+    - 1.kafka:9092
+  TopicCreateDoc: create-doc
+  TopicParseDoc: parse-doc
+  ConsumerGroup: userdoc
+
+Elasticsearch:
+  Addresses:
+    - 1.es:9200
+  APIKey:
+  Index: wesearch
+
