@@ -63,6 +63,7 @@ func buildMatchTable(cfg config.WeSearch) map[string]Parser {
 	matchTable := make(map[string]Parser)
 	matchTable[cfg.KeyPrefix.UrlCollector] = parsers.NewUrlCollectorParser(cfg.KeyPrefix.UrlCollector)
 	matchTable[cfg.KeyPrefix.UrlQuery] = parsers.NewUrlQueryParser(cfg.KeyPrefix.UrlQuery)
+	matchTable[""] = parsers.NewDefaultParser()
 
 	return matchTable
 }

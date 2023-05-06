@@ -17,7 +17,8 @@ type (
 		documentsModel
 		Trans(ctx context.Context, fn func(context context.Context, session sqlx.Session) error) error
 		FindByUrlHash(ctx context.Context, session sqlx.Session, urlHash string) ([]*Documents, error)
-		FindByUID(ctx context.Context, session sqlx.Session, userID string) ([]*Documents, error)
+		FindByUID(ctx context.Context, session sqlx.Session, userID int64) ([]*Documents, error)
+		FindOneByUIDAndDocID(ctx context.Context, session sqlx.Session, userID int64, docID int64) (*Documents, error)
 	}
 
 	customDocumentsModel struct {
@@ -59,7 +60,7 @@ func (m *customDocumentsModel) FindByUrlHash(ctx context.Context, session sqlx.S
 	}
 }
 
-func (m *customDocumentsModel) FindByUID(ctx context.Context, session sqlx.Session, userID string) ([]*Documents, error) {
+func (m *customDocumentsModel) FindByUID(ctx context.Context, session sqlx.Session, userID int64) ([]*Documents, error) {
 	var resp []*Documents
 
 	query := fmt.Sprintf(
@@ -80,6 +81,32 @@ func (m *customDocumentsModel) FindByUID(ctx context.Context, session sqlx.Sessi
 		return resp, nil
 	case sqlc.ErrNotFound:
 		return resp, nil
+	default:
+		return nil, err
+	}
+}
+
+func (m *customDocumentsModel) FindOneByUIDAndDocID(ctx context.Context, session sqlx.Session, userID int64, docID int64) (*Documents, error) {
+	var resp Documents
+
+	query := fmt.Sprintf(
+		"select d.id, d.url, d.hash, d.title, d.description, ud.created_at from %s as d "+
+			"left join "+
+			"%s as ud on "+
+			"ud.doc_id=d.id where ud.uid= ? and d.id= ?",
+		m.tableName(), newUserDocsModel(nil).tableName(),
+	)
+
+	var err error
+	if session != nil {
+		err = session.QueryRowCtx(ctx, &resp, query, userID, docID)
+	}
+	err = m.conn.QueryRowCtx(ctx, &resp, query, userID, docID)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, err
 	default:
 		return nil, err
 	}

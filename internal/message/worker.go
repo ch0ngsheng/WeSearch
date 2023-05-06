@@ -21,13 +21,13 @@ func MustNewWorker(cfg KafkaConfig, fn func(msg []byte) error) {
 	}()
 }
 
-func ReadMessage(data []byte) error {
-	msg := &Body{}
+func ReadDocCollectionMessage(data []byte) error {
+	msg := &DocCollection{}
 	if err := json.Unmarshal(data, msg); err != nil {
 		log.Printf("msg unmarshal %v", err)
 		return err
 	}
 
-	log.Printf("rec: docID %d, content %s", msg.DocID, msg.Content)
+	log.Printf("rec: docID %d, content %s", msg.DocID, msg.URL)
 	return nil
 }

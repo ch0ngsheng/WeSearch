@@ -27,7 +27,7 @@ type (
 		Insert(ctx context.Context, session sqlx.Session, data *Users) (sql.Result, error)
 		FindOne(ctx context.Context, session sqlx.Session, id int64) (*Users, error)
 		FindOneByOpenid(ctx context.Context, session sqlx.Session, openid string) (*Users, error)
-		Update(ctx context.Context, session sqlx.Session, data *Users) error
+		Update(ctx context.Context, session sqlx.Session, data *Users) (sql.Result, error)
 		Delete(ctx context.Context, session sqlx.Session, id int64) error
 	}
 
@@ -107,7 +107,7 @@ func (m *defaultUsersModel) Insert(ctx context.Context, session sqlx.Session, da
 	return m.conn.ExecCtx(ctx, query, data.Openid)
 }
 
-func (m *defaultUsersModel) Update(ctx context.Context, session sqlx.Session, newData *Users) error {
+func (m *defaultUsersModel) Update(ctx context.Context, session sqlx.Session, newData *Users) (sql.Result, error) {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, usersRowsWithPlaceHolder)
 	if session != nil {
 		return session.ExecCtx(ctx, query, newData.Openid, newData.Id)

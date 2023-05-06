@@ -3,7 +3,7 @@ package config
 import (
 	"github.com/zeromicro/go-zero/zrpc"
 
-	"chongsheng.art/wesearch/services/userdocument/message"
+	"chongsheng.art/wesearch/internal/message"
 )
 
 type Config struct {
@@ -16,4 +16,6 @@ type Config struct {
 	}
 
 	Version string
+
+	RetrieveRpcConf zrpc.RpcClientConf
 }

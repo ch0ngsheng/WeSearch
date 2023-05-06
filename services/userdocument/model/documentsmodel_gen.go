@@ -27,7 +27,7 @@ type (
 		Insert(ctx context.Context, session sqlx.Session, data *Documents) (sql.Result, error)
 		FindOne(ctx context.Context, session sqlx.Session, id int64) (*Documents, error)
 		FindOneByUrl(ctx context.Context, session sqlx.Session, url string) (*Documents, error)
-		Update(ctx context.Context, session sqlx.Session, data *Documents) error
+		Update(ctx context.Context, session sqlx.Session, data *Documents) (sql.Result, error)
 		Delete(ctx context.Context, session sqlx.Session, id int64) error
 	}
 
@@ -109,7 +109,7 @@ func (m *defaultDocumentsModel) Insert(ctx context.Context, session sqlx.Session
 	return m.conn.ExecCtx(ctx, query, data.Url, data.Hash, data.Title, data.Description)
 }
 
-func (m *defaultDocumentsModel) Update(ctx context.Context, session sqlx.Session, newData *Documents) error {
+func (m *defaultDocumentsModel) Update(ctx context.Context, session sqlx.Session, newData *Documents) (sql.Result, error) {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, documentsRowsWithPlaceHolder)
 	if session != nil {
 		return session.ExecCtx(ctx, query, newData.Url, newData.Hash, newData.Title, newData.Description, newData.Id)

@@ -26,7 +26,7 @@ type (
 	userDocsModel interface {
 		Insert(ctx context.Context, session sqlx.Session, data *UserDocs) (sql.Result, error)
 		FindOne(ctx context.Context, session sqlx.Session, id int64) (*UserDocs, error)
-		Update(ctx context.Context, session sqlx.Session, data *UserDocs) error
+		Update(ctx context.Context, session sqlx.Session, data *UserDocs) (sql.Result, error)
 		Delete(ctx context.Context, session sqlx.Session, id int64) error
 	}
 
@@ -86,7 +86,7 @@ func (m *defaultUserDocsModel) Insert(ctx context.Context, session sqlx.Session,
 	return m.conn.ExecCtx(ctx, query, data.Uid, data.DocId)
 }
 
-func (m *defaultUserDocsModel) Update(ctx context.Context, session sqlx.Session, data *UserDocs) error {
+func (m *defaultUserDocsModel) Update(ctx context.Context, session sqlx.Session, data *UserDocs) (sql.Result, error) {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userDocsRowsWithPlaceHolder)
 	if session != nil {
 		return session.ExecCtx(ctx, query, data.Uid, data.DocId, data.Id)

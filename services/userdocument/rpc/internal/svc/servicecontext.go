@@ -1,7 +1,9 @@
 package svc
 
 import (
+	"chongsheng.art/wesearch/services/retrieve/rpc/retrieve"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
+	"github.com/zeromicro/go-zero/zrpc"
 
 	"chongsheng.art/wesearch/internal/mq"
 	"chongsheng.art/wesearch/services/userdocument/model"
@@ -17,6 +19,8 @@ type ServiceContext struct {
 	UserDocModel model.UserDocsModel
 	UserModel    model.UsersModel
 	DocModel     model.DocumentsModel
+
+	RetrieveRpc retrieve.Retrieve
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -27,5 +31,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		Producer:     mq.MustNewMqProducer(c.Kafka.Brokers),
 		Consumer:     mq.MustNewMqConsumer(c.Kafka.Brokers),
 		UserDocModel: model.NewUserDocsModel(conn),
+		RetrieveRpc:  retrieve.NewRetrieve(zrpc.MustNewClient(c.RetrieveRpcConf)),
 	}
 }

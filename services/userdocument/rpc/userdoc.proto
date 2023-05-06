@@ -17,9 +17,6 @@ message VersionResp {
 message DocumentCollectReq {
   string WxUID = 1; // 微信用户OpenID
   string URL = 2; // 文档地址
-  string Title = 3; // 文档标题
-  string Description = 4; // 文档描述
-  string Content = 5; // 文档内容
 }
 message DocumentCollectResp {
 }

@@ -2,14 +2,13 @@ package logic
 
 import (
 	"context"
-	"database/sql"
 	"time"
 
 	"github.com/zeromicro/go-zero/core/hash"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 
-	"chongsheng.art/wesearch/services/userdocument/message"
+	"chongsheng.art/wesearch/internal/message"
 	"chongsheng.art/wesearch/services/userdocument/model"
 	"chongsheng.art/wesearch/services/userdocument/rpc/internal/svc"
 	"chongsheng.art/wesearch/services/userdocument/rpc/pb"
@@ -43,10 +42,8 @@ func (l *CreateDocLogic) CreateDoc(in *pb.DocumentCollectReq) (*pb.DocumentColle
 
 		// 创建document并绑定关系
 		docParam := &model.Documents{
-			Url:         in.GetURL(),
-			Hash:        string(hash.Md5([]byte(in.GetURL()))),
-			Title:       sql.NullString{String: in.GetTitle(), Valid: true},
-			Description: sql.NullString{String: in.GetDescription(), Valid: true},
+			Url:  in.GetURL(),
+			Hash: string(hash.Md5([]byte(in.GetURL()))),
 		}
 		newDoc, err := l.findOrCreateDoc(user.Id, session, docParam)
 		if err != nil {
@@ -54,11 +51,11 @@ func (l *CreateDocLogic) CreateDoc(in *pb.DocumentCollectReq) (*pb.DocumentColle
 		}
 
 		// 写入消息队列，数据库中不保存content
-		msg, err := message.BuildMsg(&message.Body{DocID: newDoc.Id, Content: in.Content})
+		msg, err := message.BuildDocMsg(&message.DocCollection{DocID: newDoc.Id, URL: in.GetURL()})
 		if err != nil {
 			return err
 		}
-		return l.svcCtx.Producer.Send(message.Topic, msg)
+		return l.svcCtx.Producer.Send(l.svcCtx.Config.Kafka.Topic, msg)
 	},
 	)
 

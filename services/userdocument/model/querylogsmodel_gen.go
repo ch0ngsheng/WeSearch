@@ -26,7 +26,7 @@ type (
 	queryLogsModel interface {
 		Insert(ctx context.Context, session sqlx.Session, data *QueryLogs) (sql.Result, error)
 		FindOne(ctx context.Context, session sqlx.Session, id int64) (*QueryLogs, error)
-		Update(ctx context.Context, session sqlx.Session, data *QueryLogs) error
+		Update(ctx context.Context, session sqlx.Session, data *QueryLogs) (sql.Result, error)
 		Delete(ctx context.Context, session sqlx.Session, id int64) error
 	}
 
@@ -86,7 +86,7 @@ func (m *defaultQueryLogsModel) Insert(ctx context.Context, session sqlx.Session
 	return m.conn.ExecCtx(ctx, query, data.Uid, data.Content)
 }
 
-func (m *defaultQueryLogsModel) Update(ctx context.Context, session sqlx.Session, data *QueryLogs) error {
+func (m *defaultQueryLogsModel) Update(ctx context.Context, session sqlx.Session, data *QueryLogs) (sql.Result, error) {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, queryLogsRowsWithPlaceHolder)
 	if session != nil {
 		return session.ExecCtx(ctx, query, data.Uid, data.Content, data.Id)

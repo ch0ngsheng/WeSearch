@@ -1,19 +1,21 @@
 # WeSearch
 
 ```text
-       ------------                     -------------       ----------
-       |  manager |  -- rpc doc url ->  |  user-doc |   --  |  mysql |
-       |  manager |                     |  user-doc |       |  mysql |
-       ------------                     -------------       ----------
-            |                                 |
-        rpc | search                  produce | consume
-            |                                 |
-       -------------                    -------------
-       | retriever |    <- doc url --   |   kafka   |
-       | retriever |    -- abstract ->  |   kafka   |
-       -------------                    -------------
-             |       
-     -----------------
-     | elasticsearch |
-     -----------------
+                                         ----------
+                                         |  mysql |
+                                         |  mysql |
+                                         ----------
+                                              |
+       ------------                     -------------             ------------- 
+       |  manager | -- rpc create doc-> |  user-doc |  -produce-> |   kafka   |
+       |  manager | -- rpc search doc-> |  user-doc |  <-consume  |   kafka   |
+       ------------                     -------------             -------------
+                                              |                         |
+                                 rpc retrieve |                         | 
+                                              |                         |
+       -----------------                -------------   -----------------
+       | elasticsearch |   <- store-    | retriever |      <- doc url -
+       | elasticsearch |  -retrieve ->  | retriever |      - abstract ->
+       -----------------                -------------
+
 ```
