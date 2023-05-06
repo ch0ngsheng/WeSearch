@@ -27,6 +27,5 @@ ENV TZ Asia/Shanghai
 
 WORKDIR /app
 COPY --from=builder /app/wesearch-manager /app/wesearch-manager
-COPY --from=builder /build/etc /app/etc
 
 CMD ["./wesearch-manager", "-f", "etc/manager.yaml"]

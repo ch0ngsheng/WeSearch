@@ -1,0 +1,116 @@
+version: "3.0"
+services:
+  1.etcd:
+    image: bitnami/etcd:3.5.8
+    networks :
+      - wesearch_external
+      - wesearch_internal
+    container_name: 1.etcd
+    restart: always
+    #ports:
+    #  - "22379:2379"
+    #  - "22380:2380"
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_NAME=1.etcd
+      - ETCD_ADVERTISE_CLIENT_URLS=https://1.etcd:2379
+      - ETCD_INITIAL_ADVERTISE_PEER_URLS=https://1.etcd:2380
+      - ETCD_INITIAL_CLUSTER=etcd1=https://1.etcd:2380
+      - ETCD_LISTEN_CLIENT_URLS=https://0.0.0.0:2379
+      - ETCD_LISTEN_PEER_URLS=https://0.0.0.0:2380
+      - ETCD_INITIAL_CLUSTER_TOKEN=etcd-cluster
+      - ETCD_INITIAL_CLUSTER_STATE=new
+      - ETCD_LOG_LEVEL=debug
+      - ETCD_TRUSTED_CA_FILE=/bitnami/certs/ca.crt # eq. ETCD_CLIENT_CERT_AUTH=true
+      - ETCD_CERT_FILE=/bitnami/certs/etcd-server.crt
+      - ETCD_KEY_FILE=/bitnami/certs/etcd-server.key
+      - ETCD_PEER_TRUSTED_CA_FILE=/bitnami/certs/ca.crt
+      - ETCD_PEER_CERT_FILE=/bitnami/certs/etcd-server.crt
+      - ETCD_PEER_KEY_FILE=/bitnami/certs/etcd-server.key
+    volumes:
+      - /home/wesearch/etcd/data:/bitnami/etcd
+      - /home/wesearch/certs:/bitnami/certs
+  1.kafka:
+    image: "bitnami/kafka:3.3.1"
+    networks:
+      - wesearch_internal
+    container_name: 1.kafka
+    user: root
+    #ports:
+    #  - "9192:9092"
+    #  - "9193:9093"
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://1.kafka:9092 # 外网访问地址（宿主机ip地址和端口）
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_HEAP_OPTS=-Xmx512M -Xms256M
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=false
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller # kafka角色
+      - ALLOW_PLAINTEXT_LISTENER=yes # 允许使用PLAINTEXT监听器，默认false，不建议在生产环境使用
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@1.kafka:9093
+      - KAFKA_KRAFT_CLUSTER_ID=LelM2dIFQkiUFvXCEcqRWA
+    volumes:
+      - /home/wesearch/kafka/data:/bitnami/kafka
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.0
+    networks:
+      - wesearch_internal
+    #ports:
+    #  - "9200:9200"
+    #  - "9300:9300"
+    container_name: "elasticsearch"
+    environment:
+      - discovery.type=single-node # 单节点
+      - ES_JAVA_OPTS="-Xms1G -Xmx2G"
+    volumes:
+      - /home/wesearch/elasticsearch/config:/usr/share/elasticsearch/config/
+      - /home/wesearch/elasticsearch/data:/usr/share/elasticsearch/data
+      - /home/wesearch/elasticsearch/plugins:/usr/share/elasticsearch/plugins
+      - /home/wesearch/elasticsearch/logs:/usr/share/elasticsearch/logs
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.7.0
+    networks:
+      - wesearch_internal
+    ports:
+      - "5601:5601"
+    container_name: "kibana"
+    depends_on:
+      - elasticsearch
+    volumes:
+      - /home/wesearch/kibana/config:/usr/share/kibana/config/
+      - /home/wesearch/kibana/data:/usr/share/kibana/data
+      - /home/wesearch/kibana/plugins:/usr/share/kibana/plugins
+      - /home/wesearch/kibana/logs:/usr/share/kibana/logs
+  mysql:
+    container_name: mysql
+    image: mysql:5.7.31
+    restart: always
+    privileged: true
+    volumes:
+      - /home/wesearch/mysql/log:/var/log/mysql
+      - /home/wesearch/mysql/conf/my.cnf:/etc/mysql/my.cnf
+      - /home/wesearch/mysql/data:/var/lib/mysql
+      - /home/wesearch/mysql/init:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+      # MYSQL_USER: 'root'
+      # MYSQL_PASS: '123456'
+    command: [
+      '--character-set-server=utf8mb4',
+      '--collation-server=utf8mb4_general_ci',
+      '--max_connections=3000'
+    ]
+networks:
+  wesearch_internal:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.1.0/24
+  wesearch_external:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.2.0/24

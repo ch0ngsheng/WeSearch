@@ -1,6 +1,5 @@
 Name: userdoc.rpc
 ListenOn: 0.0.0.0:7002
-Version: 0.0.1
 Etcd:
   Hosts:
   - 1.etcd:2379

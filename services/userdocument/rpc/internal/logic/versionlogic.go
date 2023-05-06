@@ -1,7 +1,9 @@
 package logic
 
 import (
+	"chongsheng.art/wesearch/services/retrieve/rpc/retrieve"
 	"context"
+	"log"
 
 	"chongsheng.art/wesearch/services/userdocument/rpc/internal/svc"
 	"chongsheng.art/wesearch/services/userdocument/rpc/pb"
@@ -24,7 +26,13 @@ func NewVersionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *VersionLo
 }
 
 func (l *VersionLogic) Version(in *pb.VersionReq) (*pb.VersionResp, error) {
+	resp, err := l.svcCtx.RetrieveRpc.Version(l.ctx, &retrieve.VersionReq{})
+	if err != nil {
+		log.Printf("failed to request retriever, err: %v", err)
+		return nil, err
+	}
+
 	return &pb.VersionResp{
-		Version: l.svcCtx.Config.Version,
+		Version: resp.Version,
 	}, nil
 }

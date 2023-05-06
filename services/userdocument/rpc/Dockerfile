@@ -25,6 +25,5 @@ ENV TZ Asia/Shanghai
 
 WORKDIR /app
 COPY --from=builder /app/userdoc /app/userdoc
-COPY --from=builder /build/etc /app/etc
 
 CMD ["./userdoc", "-f", "etc/userdoc.yaml"]

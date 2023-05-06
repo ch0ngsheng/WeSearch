@@ -1,6 +1,7 @@
 # Image URL to use all building/pushing image targets
 IMGManager ?= yuchsh/wesearch-manager:latest
 IMGUserDoc ?= yuchsh/wesearch-userdoc:latest
+IMGRetrieve ?= yuchsh/wesearch-retrieve:latest
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 ifeq (,$(shell go env GOBIN))
@@ -58,7 +59,11 @@ docker-build: ## Build docker image with the manager.
 
 .PHONY: docker-build-userdoc
 docker-build: ## Build docker image with the manager.
-	docker build -t ${IMGUserDoc} -f services/userdocument/api/Dockerfile .
+	docker build -t ${IMGUserDoc} -f services/userdocument/rpc/Dockerfile .
+
+.PHONY: docker-build-retrieve
+docker-build: ## Build docker image with the manager.
+	docker build -t ${IMGRetrieve} -f services/retrieve/rpc/Dockerfile .
 
 .PHONY: docker-push
 docker-push: ## Push docker image with the manager.

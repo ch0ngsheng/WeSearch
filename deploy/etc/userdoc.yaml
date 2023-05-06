@@ -1,6 +1,5 @@
 Name: userdoc.rpc
 ListenOn: 0.0.0.0:7002
-Version: 0.0.1
 Etcd:
   Hosts:
     - 1.etcd:2379
@@ -14,5 +13,15 @@ DB:
 Kafka:
   Brokers:
     - 1.kafka:9092
-  Topic: wesearch
+  TopicCreateDoc: create-doc
+  TopicParseDoc: parse-doc
   ConsumerGroup: userdoc
+RetrieveRpcConf:
+  Etcd:
+    Hosts:
+      - 1.etcd:2379
+    Key: retrieve.rpc
+    CertFile: certs/ca.crt
+    CertKeyFile: certs/etcd-client.key
+    CACertFile: certs/etcd-ca.crt
+    InsecureSkipVerify: false

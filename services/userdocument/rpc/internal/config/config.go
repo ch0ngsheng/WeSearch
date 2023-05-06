@@ -15,7 +15,5 @@ type Config struct {
 		DataSource string
 	}
 
-	Version string
-
 	RetrieveRpcConf zrpc.RpcClientConf
 }

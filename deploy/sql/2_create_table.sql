@@ -1,4 +1,3 @@
-# sync with deploy/sql/create_table.sql
 CREATE TABLE IF NOT EXISTS users
 (
     id BIGINT NOT NULL AUTO_INCREMENT COMMENT 'user id',
