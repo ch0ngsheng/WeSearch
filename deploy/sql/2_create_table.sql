@@ -1,3 +1,4 @@
+use wesearch;
 CREATE TABLE IF NOT EXISTS users
 (
     id BIGINT NOT NULL AUTO_INCREMENT COMMENT 'user id',

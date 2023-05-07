@@ -43,9 +43,6 @@ mkdir -p /home/wesearch/kibana/{config,data,logs,plugins}
 
 mv /tmp/deploy/es/* /home/wesearch/elasticsearch/config
 
-chown -R 1000:0 /home/wesearch/elasticsearch
-chown -R 1000:0 /home/wesearch/kibana
-
 cat > /home/wesearch/elasticsearch/config/elasticsearch.yml <<EOF
 network.host: 0.0.0.0
 cluster.name: "docker-cluster"
@@ -55,6 +52,9 @@ cat > /home/wesearch/kibana/config/kibana.yml <<EOF
 server.host: 0.0.0.0
 i18n.locale: "zh-CN"
 EOF
+
+chown -R 1000:0 /home/wesearch/elasticsearch
+chown -R 1000:0 /home/wesearch/kibana
 
 echo -e "\n\nTIPS: after deploy containers, should:"
 echo -e "1. connect es using kibana, generate APIKey and write to etc/retrieve.yaml

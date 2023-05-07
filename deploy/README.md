@@ -57,9 +57,6 @@ mkdir -p /home/wesearch/kibana/{config,data,logs,plugins}
 
 mv es/* /home/wesearch/elasticsearch/config
 
-chown -R 1000:0 /home/wesearch/elasticsearch
-chown -R 1000:0 /home/wesearch/kibana
-
 cat > /home/wesearch/elasticsearch/config/elasticsearch.yml <<EOF
 network.host: 0.0.0.0
 cluster.name: "docker-cluster"
@@ -70,11 +67,26 @@ server.host: 0.0.0.0
 i18n.locale: "zh-CN"
 EOF
 
+touch /home/wesearch/elasticsearch/users
+touch /home/wesearch/elasticsearch/users_roles
+
+chown -R 1000:0 /home/wesearch/elasticsearch
+chown -R 1000:0 /home/wesearch/kibana
 ```
 
-ES初次启动后，会在控制台打印enroll token，用于在Kibana初次登录页面配置对接ES。 
+## 对接
+获取enroll token
+```shell
+docker exec -it elasticsearch bin/elasticsearch-create-enrollment-token --scope kibana
+```
+重置elasticsearch用户密码
+```shell
+docker exec -it elasticsearch bin/elasticsearch-reset-password -u elastic
+```
 
-参考文档：
+使用 http://{HOST_IP}:5601 访问Kibana，使用enroll token和用户名密码登录。
+
+参考文档：[ES官方文档](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)
 
 
 对接完成后，可以在Kibana上获取APIKEY，然后配置到wesearch-retrieve服务的配置文件。
