@@ -15,7 +15,7 @@ services:
       - ETCD_NAME=1.etcd
       - ETCD_ADVERTISE_CLIENT_URLS=https://1.etcd:2379
       - ETCD_INITIAL_ADVERTISE_PEER_URLS=https://1.etcd:2380
-      - ETCD_INITIAL_CLUSTER=etcd1=https://1.etcd:2380
+      - ETCD_INITIAL_CLUSTER=1.etcd=https://1.etcd:2380
       - ETCD_LISTEN_CLIENT_URLS=https://0.0.0.0:2379
       - ETCD_LISTEN_PEER_URLS=https://0.0.0.0:2380
       - ETCD_INITIAL_CLUSTER_TOKEN=etcd-cluster
@@ -64,7 +64,7 @@ services:
     container_name: "elasticsearch"
     environment:
       - discovery.type=single-node # 单节点
-      - ES_JAVA_OPTS="-Xms1G -Xmx2G"
+      # - ES_JAVA_OPTS="-Xms1024M -Xmx2048M" # see jvm.options
     volumes:
       - /home/wesearch/elasticsearch/config:/usr/share/elasticsearch/config/
       - /home/wesearch/elasticsearch/data:/usr/share/elasticsearch/data

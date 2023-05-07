@@ -55,6 +55,8 @@ ES和Kibana各自都有自己的config,data,logs,plugins目录，需要将这些
 mkdir -p /home/wesearch/elasticsearch/{config,data,logs,plugins}
 mkdir -p /home/wesearch/kibana/{config,data,logs,plugins}
 
+mv es/* /home/wesearch/elasticsearch/config
+
 chown -R 1000:0 /home/wesearch/elasticsearch
 chown -R 1000:0 /home/wesearch/kibana
 
@@ -67,9 +69,13 @@ cat > /home/wesearch/kibana/config/kibana.yml <<EOF
 server.host: 0.0.0.0
 i18n.locale: "zh-CN"
 EOF
+
 ```
 
 ES初次启动后，会在控制台打印enroll token，用于在Kibana初次登录页面配置对接ES。 
+
+参考文档：
+
 
 对接完成后，可以在Kibana上获取APIKEY，然后配置到wesearch-retrieve服务的配置文件。
 ## 创建Index

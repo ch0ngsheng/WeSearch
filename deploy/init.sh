@@ -35,10 +35,13 @@ mkdir -p /home/wesearch/kafka/data
 
 echo "etcd"
 mkdir -p /home/wesearch/etcd/data
+chown -R 1001:1001 /home/wesearch/etcd
 
 echo "elasticsearch & kibana"
 mkdir -p /home/wesearch/elasticsearch/{config,data,logs,plugins}
 mkdir -p /home/wesearch/kibana/{config,data,logs,plugins}
+
+mv /tmp/deploy/es/* /home/wesearch/elasticsearch/config
 
 chown -R 1000:0 /home/wesearch/elasticsearch
 chown -R 1000:0 /home/wesearch/kibana
@@ -53,7 +56,7 @@ server.host: 0.0.0.0
 i18n.locale: "zh-CN"
 EOF
 
-echo "TIPS: after deploy containers, should:"
+echo -e "\n\nTIPS: after deploy containers, should:"
 echo -e "1. connect es using kibana, generate APIKey and write to etc/retrieve.yaml
 2. create es index
 3. create kafka topic
