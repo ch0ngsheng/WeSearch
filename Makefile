@@ -54,18 +54,19 @@ run: fmt vet ## Run a controller from your host.
 	go run services/wxmanager/api/manager.go
 
 .PHONY: docker-build-manager
-docker-build: ## Build docker image with the manager.
+docker-build-manager: ## Build docker image with the manager.
 	docker build -t ${IMGManager} -f services/wxmanager/api/Dockerfile .
 
 .PHONY: docker-build-userdoc
-docker-build: ## Build docker image with the manager.
+docker-build-userdoc: ## Build docker image with the manager.
 	docker build -t ${IMGUserDoc} -f services/userdocument/rpc/Dockerfile .
 
 .PHONY: docker-build-retrieve
-docker-build: ## Build docker image with the manager.
+docker-build-retrieve: ## Build docker image with the manager.
 	docker build -t ${IMGRetrieve} -f services/retrieve/rpc/Dockerfile .
 
 .PHONY: docker-push
 docker-push: ## Push docker image with the manager.
 	docker push ${IMGManager}
 	docker push ${IMGUserDoc}
+	docker push ${IMGRetrieve}

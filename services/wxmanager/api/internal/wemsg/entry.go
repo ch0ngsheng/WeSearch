@@ -7,24 +7,18 @@ import (
 	"github.com/silenceper/wechat/v2/officialaccount/message"
 
 	"chongsheng.art/wesearch/services/wxmanager/api/internal/config"
-	"chongsheng.art/wesearch/services/wxmanager/api/internal/svc"
 	"chongsheng.art/wesearch/services/wxmanager/api/internal/wemsg/parsers"
 )
-
-type Parser interface {
-	Prefix() string
-	Parse(ctx *svc.ServiceContext, msg *message.MixMessage) (string, error)
-}
 
 type Handler interface {
 	Do(msg *message.MixMessage) *message.Reply
 }
 
 // NewWxMsgHandler 构造消息处理器
-func NewWxMsgHandler(cfg config.WeSearch, ctx *svc.ServiceContext) Handler {
+func NewWxMsgHandler(cfg config.WeSearch, obj *parsers.HandlerObj) Handler {
 	return &handler{
 		config:     cfg,
-		svcCtx:     ctx,
+		obj:        obj,
 		parsers:    buildMatchTable(cfg),
 		matchOrder: buildMatchOrder(cfg),
 	}
@@ -32,8 +26,8 @@ func NewWxMsgHandler(cfg config.WeSearch, ctx *svc.ServiceContext) Handler {
 
 type handler struct {
 	config     config.WeSearch
-	svcCtx     *svc.ServiceContext
-	parsers    map[string]Parser
+	obj        *parsers.HandlerObj
+	parsers    map[string]parsers.Parser
 	matchOrder []string
 }
 
@@ -47,7 +41,7 @@ func (h handler) Do(msg *message.MixMessage) *message.Reply {
 		}
 	}
 
-	resp, err := h.parsers[key].Parse(h.svcCtx, msg)
+	resp, err := h.parsers[key].Parse(h.obj, msg)
 	if err != nil {
 		return &message.Reply{MsgType: message.MsgTypeText, MsgData: message.NewText("system error")}
 	}
@@ -59,8 +53,8 @@ func buildMatchOrder(cfg config.WeSearch) []string {
 	return []string{cfg.KeyPrefix.UrlCollector, cfg.KeyPrefix.UrlQuery}
 }
 
-func buildMatchTable(cfg config.WeSearch) map[string]Parser {
-	matchTable := make(map[string]Parser)
+func buildMatchTable(cfg config.WeSearch) map[string]parsers.Parser {
+	matchTable := make(map[string]parsers.Parser)
 	matchTable[cfg.KeyPrefix.UrlCollector] = parsers.NewUrlCollectorParser(cfg.KeyPrefix.UrlCollector)
 	matchTable[cfg.KeyPrefix.UrlQuery] = parsers.NewUrlQueryParser(cfg.KeyPrefix.UrlQuery)
 	matchTable[""] = parsers.NewDefaultParser()

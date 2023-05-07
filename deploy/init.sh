@@ -1,11 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 
 # run as root as /tmp/deploy dir.
 
 echo "common"
 mkdir -p /home/wesearch
-cp /tmp/deploy/certs /home/wesearch
-cp /tmp/deploy/etc /home/wesearch
+cp -r /tmp/deploy/certs /home/wesearch
+cp -r /tmp/deploy/etc /home/wesearch
 
 echo "mysql"
 mkdir -p /home/wesearch/mysql/{conf,data,log,init}
@@ -53,7 +53,7 @@ server.host: 0.0.0.0
 i18n.locale: "zh-CN"
 EOF
 
-echo "TODO next:"
+echo "TIPS: after deploy containers, should:"
 echo -e "1. connect es using kibana, generate APIKey and write to etc/retrieve.yaml
 2. create es index
 3. create kafka topic
