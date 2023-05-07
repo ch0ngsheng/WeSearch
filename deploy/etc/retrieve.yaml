@@ -5,9 +5,9 @@ Etcd:
   Hosts:
     - 1.etcd:2379
   Key: retrieve.rpc
-  CertFile: certs/ca.crt
+  CertFile: certs/etcd-client.crt
   CertKeyFile: certs/etcd-client.key
-  CACertFile: certs/etcd-ca.crt
+  CACertFile: certs/ca.crt
   InsecureSkipVerify: false
 
 Kafka:

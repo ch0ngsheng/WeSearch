@@ -42,6 +42,8 @@ mkdir -p /home/wesearch/elasticsearch/{config,data,logs,plugins}
 mkdir -p /home/wesearch/kibana/{config,data,logs,plugins}
 
 mv /tmp/deploy/es/* /home/wesearch/elasticsearch/config
+touch /home/wesearch/elasticsearch/config/users
+touch /home/wesearch/elasticsearch/config/users_roles
 
 cat > /home/wesearch/elasticsearch/config/elasticsearch.yml <<EOF
 network.host: 0.0.0.0
