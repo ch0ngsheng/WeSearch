@@ -3,7 +3,7 @@ services:
   manager:
     image: "yuchsh/wesearch-manager:latest"
     networks:
-      - wesearch_external
+      - wesearch_dmz
     container_name: manager
     ports:
       - "7001:7001"
@@ -15,9 +15,13 @@ services:
       - retrieve
   userdoc:
     image: "yuchsh/wesearch-userdoc:latest"
-    networks:
-      - wesearch_internal
     container_name: userdoc
+    environment:
+      - POD_IP=172.22.2.1 # tell ETCD my IP by go-zero, for manager access from dmz net plane.
+    networks:
+      wesearch_internal:
+      wesearch_dmz:
+        ipv4_address: 172.22.2.1
     volumes:
       - /home/wesearch/etc:/app/etc
       - /home/wesearch/certs:/app/certs
@@ -31,16 +35,8 @@ services:
     volumes:
       - /home/wesearch/etc:/app/etc
       - /home/wesearch/certs:/app/certs
-    depends_on:
-      - retrieve
 networks:
   wesearch_internal:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.22.1.0/24
-  wesearch_external:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.22.2.0/24
+    external: true # 即声明该网络已存在
+  wesearch_dmz:
+    external: true

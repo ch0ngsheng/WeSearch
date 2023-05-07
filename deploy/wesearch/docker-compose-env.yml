@@ -3,8 +3,8 @@ services:
   1.etcd:
     image: bitnami/etcd:3.5.8
     networks :
-      - wesearch_external
-      - wesearch_internal
+      - dmz
+      - internal
     container_name: 1.etcd
     restart: always
     #ports:
@@ -33,7 +33,7 @@ services:
   1.kafka:
     image: "bitnami/kafka:3.3.1"
     networks:
-      - wesearch_internal
+      - internal
     container_name: 1.kafka
     user: root
     #ports:
@@ -57,7 +57,7 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.7.0
     networks:
-      - wesearch_internal
+      - internal
     #ports:
     #  - "9200:9200"
     #  - "9300:9300"
@@ -73,7 +73,7 @@ services:
   kibana:
     image: docker.elastic.co/kibana/kibana:8.7.0
     networks:
-      - wesearch_internal
+      - internal
     ports:
       - "5601:5601"
     container_name: "kibana"
@@ -104,12 +104,12 @@ services:
       '--max_connections=3000'
     ]
 networks:
-  wesearch_internal:
+  internal:
     driver: bridge
     ipam:
       config:
         - subnet: 172.22.1.0/24
-  wesearch_external:
+  dmz:
     driver: bridge
     ipam:
       config:
