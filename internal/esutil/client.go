@@ -22,11 +22,12 @@ func MustNewRetriever(addr []string, apiKey string, index string) Retriever {
 		APIKey:    apiKey,
 		Transport: &http.Transport{
 			MaxIdleConnsPerHost:   10,
-			ResponseHeaderTimeout: time.Second,
+			ResponseHeaderTimeout: 3 * time.Second,
 			DialContext: (&net.Dialer{
-				Timeout:   30 * time.Second,
-				KeepAlive: 30 * time.Second,
+				Timeout:   3 * time.Second,
+				KeepAlive: 10 * time.Second,
 			}).DialContext,
+			DisableKeepAlives: false,
 			TLSClientConfig: &tls.Config{
 				InsecureSkipVerify: true, // self-signed certificate
 			},
