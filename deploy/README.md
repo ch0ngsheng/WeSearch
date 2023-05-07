@@ -1,80 +1,30 @@
 # 部署注意事项
 总体顺序：
-* 创建目录，创建配置文件、证书
+* 执行init.sh创建目录，创建配置文件、证书
 * 创建docker-compose-env中的容器
-* kafka、ES配置初始化
+* kafka、ES配置初始化，中间件状态检查
 * 创建docker-compose中的容器
 
-# 宿主机公共目录创建
-创建目录并上传配置文件，证书文件。
+# 部署流程
+将`deploy`目录上传到服务器`/tmp`下，给init.sh添加执行权限并执行
 ```shell
-mkdir -p /home/wesearch/{certs,etc,yml}
-```
-# Mysql
-目录创建
-```shell
-mkdir -p /home/wesearch/mysql/{conf,data,log,init}
+cd /tmp/deploy
+chmod +x init.sh
+./init.sh
 ```
 
-拷贝初始化sql
+启动中间件容器
 ```shell
-cp *.sql /home/wesearch/mysql/init
+cd /tmp/deploy/wesearch
+docker-compose -f docker-compose-env.yml up -d
+```
+按init.sh脚本的提示及本文档后续内容完成组件初始化工作后，最后启动go服务容器
+```shell
+docker-compose -f docker-compose.yml up -d
 ```
 
-写入配置文件
-```shell
-cat > /home/wesearch/mysql/conf/my.cnf <<EOF
-[mysqld]
-pid-file        = /var/run/mysqld/mysqld.pid
-socket          = /var/run/mysqld/mysqld.sock
-datadir         = /var/lib/mysql
-lower_case_table_names=1 # 不区分大小写
-# By default we only accept connections from localhost
-#bind-address   = 127.0.0.1
-default-time_zone = '+8:00'
-
-symbolic-links=0
-character-set-server=utf8mb4
-[client]
-default-character-set=utf8mb4
-[mysql]
-default-character-set=utf8mb4
-
-EOF
-```
-登录测试
-```shell
-docker exec -it mysql mysql -uroot -p123456
-```
-# Elasticsearch & Kibana
-## 部署
-ES和Kibana各自都有自己的config,data,logs,plugins目录，需要将这些目录挂载在宿主机。
-
-由于启动时，这两个组件都需要读取自己的配置文件，可以在启动容器前在宿主机目录上创建好配置文件，填写必要的配置。
-```shell
-mkdir -p /home/wesearch/elasticsearch/{config,data,logs,plugins}
-mkdir -p /home/wesearch/kibana/{config,data,logs,plugins}
-
-mv es/* /home/wesearch/elasticsearch/config
-
-cat > /home/wesearch/elasticsearch/config/elasticsearch.yml <<EOF
-network.host: 0.0.0.0
-cluster.name: "docker-cluster"
-EOF
-
-cat > /home/wesearch/kibana/config/kibana.yml <<EOF
-server.host: 0.0.0.0
-i18n.locale: "zh-CN"
-EOF
-
-touch /home/wesearch/elasticsearch/users
-touch /home/wesearch/elasticsearch/users_roles
-
-chown -R 1000:0 /home/wesearch/elasticsearch
-chown -R 1000:0 /home/wesearch/kibana
-```
-
-## 对接
+# 组件初始化与检查
+## Elasticsearch & Kibana
 获取enroll token
 ```shell
 docker exec -it elasticsearch bin/elasticsearch-create-enrollment-token --scope kibana
@@ -88,10 +38,9 @@ docker exec -it elasticsearch bin/elasticsearch-reset-password -u elastic
 
 参考文档：[ES官方文档](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)
 
-
-对接完成后，可以在Kibana上获取APIKEY，然后配置到wesearch-retrieve服务的配置文件。
+对接完成后，可以在Kibana上创建index，获取APIKEY，然后配置到wesearch-retrieve服务的配置文件。
 ## 创建Index
-通过接口或Kibana创建Index
+通过Kibana创建Index。`Management -> 开发工具`
 ```shell
 PUT wesearch
 PUT wesearch/_mapping
@@ -108,23 +57,42 @@ PUT wesearch/_mapping
 }
 GET wesearch
 ```
-# Kafka
-## 宿主机目录创建
+## 获取APIKey
+`Management -> Stack Management -> API密钥`
+## 停止Kibana容器
+Elasticsearch初始化完成后，可以停止Kibana容器。
 ```shell
-mkdir -p /home/wesearch/kafka/data
+docker-compose -f docker-compose-env.yml stop kibana
 ```
-## 创建Topic
-进入1.kafka容器，执行命令：
+## Kafka
+创建Topic。进入1.kafka容器
+```shell
+docker exec -it kafka bash
+```
+执行命令：
 ```shell
 kafka-topics.sh --create --topic create-doc --partitions 1 --replication-factor 1 --bootstrap-server 1.kafka:9092
 kafka-topics.sh --create --topic parse-doc --partitions 1 --replication-factor 1 --bootstrap-server 1.kafka:9092
 kafka-topics.sh --bootstrap-server 1.kafka:9092 --list
 ```
-
-# Etcd
-## 宿主机目录创建
+## Mysql
+登录测试
 ```shell
-mkdir -p /home/wesearch/etcd/data
+docker exec -it mysql mysql -uroot -p123456
+```
+检查数据库及表初始化
+```shell
+use wesearch;
+show tables;
+select * from user;
+```
+## Etcd
+验证返回404即可。
+```shell
+curl --resolve 1.etcd:2379:{容器1.etcd的IP} -i https://1.etcd:2379/v2 --noproxy "*" \
+--cert /home/wesearch/certs/etcd-client.crt \
+--key /home/wesearch/certs/etcd-client.key \
+--cacert /home/wesearch/certs/ca.crt
 ```
 
 # References
