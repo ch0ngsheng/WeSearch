@@ -38,8 +38,13 @@ func (l *MessageWithRawHTTPLogic) MessageWithRawHTTP(w http.ResponseWriter, r *h
 	//处理消息接收以及回复
 	err := server.Serve()
 	if err != nil {
+		if len(server.GetOpenID()) == 0 {
+			w.WriteHeader(http.StatusForbidden)
+			_, _ = w.Write([]byte("request is not from wechat."))
+			return
+		}
 		w.WriteHeader(http.StatusInternalServerError)
-		log.Fatalf("Serve Error, err=%+v", err)
+		log.Fatalf("Serve Error, err=%+v, openID: %s", err, server.GetOpenID())
 		return
 	}
 	//发送回复的消息

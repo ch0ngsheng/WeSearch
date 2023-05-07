@@ -8,7 +8,7 @@ Etcd:
   CertKeyFile: certs/etcd-client.key
   CACertFile: certs/etcd-ca.crt
   InsecureSkipVerify: false
-DB:
+Mysql:
   DataSource: root:123456@tcp(mysql:3306)/wesearch?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
 Kafka:
   Brokers:
