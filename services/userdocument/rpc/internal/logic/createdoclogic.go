@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/md5"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/zeromicro/go-zero/core/hash"
@@ -78,7 +79,10 @@ func (l *CreateDocLogic) findOrCreateUser(openID string, session sqlx.Session) (
 		user.Id, _ = res.LastInsertId()
 		return user, nil
 	}
-	return nil, err
+	if err != nil {
+		return nil, err
+	}
+	return user, err
 }
 
 func (l *CreateDocLogic) updateTime(user *model.Users, session sqlx.Session) error {
@@ -115,6 +119,16 @@ func (l *CreateDocLogic) findOrCreateDoc(userID int64, session sqlx.Session, doc
 		}
 		docParam.Id, _ = rs.LastInsertId()
 	}
+
+	// 该用户已收藏该文档
+	oldDoc, err := l.svcCtx.DocModel.FindOneByUIDAndDocID(l.ctx, session, userID, docParam.Id)
+	if err != nil && err != sqlx.ErrNotFound {
+		log.Printf("query error, %v\n", err)
+	} else if err == nil {
+		log.Printf("user %d already collected doc %d\n", userID, docParam.Id)
+		return oldDoc, nil
+	}
+	// not found
 
 	userDoc := &model.UserDocs{
 		Uid:       userID,

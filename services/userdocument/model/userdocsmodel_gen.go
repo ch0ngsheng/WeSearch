@@ -26,6 +26,7 @@ type (
 	userDocsModel interface {
 		Insert(ctx context.Context, session sqlx.Session, data *UserDocs) (sql.Result, error)
 		FindOne(ctx context.Context, session sqlx.Session, id int64) (*UserDocs, error)
+		FindOneByUidDocId(ctx context.Context, session sqlx.Session, uid int64, docId int64) (*UserDocs, error)
 		Update(ctx context.Context, session sqlx.Session, data *UserDocs) (sql.Result, error)
 		Delete(ctx context.Context, session sqlx.Session, id int64) error
 	}
@@ -79,6 +80,26 @@ func (m *defaultUserDocsModel) FindOne(ctx context.Context, session sqlx.Session
 	}
 }
 
+func (m *defaultUserDocsModel) FindOneByUidDocId(ctx context.Context, session sqlx.Session, uid int64, docId int64) (*UserDocs, error) {
+	var resp UserDocs
+	query := fmt.Sprintf("select %s from %s where `uid` = ? and `doc_id` = ? limit 1", userDocsRows, m.table)
+	var err error
+	if session != nil {
+		err = session.QueryRowCtx(ctx, &resp, query, uid, docId)
+	} else {
+		err = m.conn.QueryRowCtx(ctx, &resp, query, uid, docId)
+	}
+
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultUserDocsModel) Insert(ctx context.Context, session sqlx.Session, data *UserDocs) (sql.Result, error) {
 	query := fmt.Sprintf("insert into %s (%s) values (?, ?)", m.table, userDocsRowsExpectAutoSet)
 	if session != nil {
@@ -87,12 +108,12 @@ func (m *defaultUserDocsModel) Insert(ctx context.Context, session sqlx.Session,
 	return m.conn.ExecCtx(ctx, query, data.Uid, data.DocId)
 }
 
-func (m *defaultUserDocsModel) Update(ctx context.Context, session sqlx.Session, data *UserDocs) (sql.Result, error) {
+func (m *defaultUserDocsModel) Update(ctx context.Context, session sqlx.Session, newData *UserDocs) (sql.Result, error) {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userDocsRowsWithPlaceHolder)
 	if session != nil {
-		return session.ExecCtx(ctx, query, data.Uid, data.DocId, data.Id)
+		return session.ExecCtx(ctx, query, newData.Uid, newData.DocId, newData.Id)
 	}
-	return m.conn.ExecCtx(ctx, query, data.Uid, data.DocId, data.Id)
+	return m.conn.ExecCtx(ctx, query, newData.Uid, newData.DocId, newData.Id)
 }
 
 func (m *defaultUserDocsModel) tableName() string {

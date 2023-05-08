@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS user_docs
     doc_id BIGINT NOT NULL COMMENT 'document id',
     created_at DATETIME NOT NULL COMMENT 'user collect time',
     PRIMARY KEY (id),
+    UNIQUE (uid, doc_id),
     KEY (uid),
     KEY (doc_id)
     # FOREIGN KEY (uid) REFERENCES users(id),
