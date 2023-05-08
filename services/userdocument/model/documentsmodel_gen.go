@@ -70,8 +70,9 @@ func (m *defaultDocumentsModel) FindOne(ctx context.Context, session sqlx.Sessio
 	var err error
 	if session != nil {
 		err = session.QueryRowCtx(ctx, &resp, query, id)
+	} else {
+		err = m.conn.QueryRowCtx(ctx, &resp, query, id)
 	}
-	err = m.conn.QueryRowCtx(ctx, &resp, query, id)
 	switch err {
 	case nil:
 		return &resp, nil

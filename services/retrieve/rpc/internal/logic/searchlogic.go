@@ -53,6 +53,6 @@ func (l *SearchLogic) Search(in *pb.SearchReq) (*pb.SearchResp, error) {
 			Score: item.Score,
 		})
 	}
-	log.Printf("search for user %s, keyword %s\n", in.UID, in.KeyWords)
+	log.Printf("search for user %s, keyword %s\n, docs %s. resp: %v", in.UID, in.KeyWords, in.DocIDs, resp)
 	return resp, nil
 }

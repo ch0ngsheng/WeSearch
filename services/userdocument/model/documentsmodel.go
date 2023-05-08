@@ -48,8 +48,9 @@ func (m *customDocumentsModel) FindByUrlHash(ctx context.Context, session sqlx.S
 	var err error
 	if session != nil {
 		err = session.QueryRowsCtx(ctx, &resp, query, urlHash)
+	} else {
+		err = m.conn.QueryRowsCtx(ctx, &resp, query, urlHash)
 	}
-	err = m.conn.QueryRowsCtx(ctx, &resp, query, urlHash)
 	switch err {
 	case nil:
 		return resp, nil
@@ -74,8 +75,10 @@ func (m *customDocumentsModel) FindByUID(ctx context.Context, session sqlx.Sessi
 	var err error
 	if session != nil {
 		err = session.QueryRowsCtx(ctx, &resp, query, userID)
+	} else {
+		err = m.conn.QueryRowsCtx(ctx, &resp, query, userID)
 	}
-	err = m.conn.QueryRowsCtx(ctx, &resp, query, userID)
+
 	switch err {
 	case nil:
 		return resp, nil
@@ -90,7 +93,7 @@ func (m *customDocumentsModel) FindOneByUIDAndDocID(ctx context.Context, session
 	var resp Documents
 
 	query := fmt.Sprintf(
-		"select d.id, d.url, d.hash, d.title, d.description, ud.created_at from %s as d "+
+		"select d.id, d.url, d.hash, d.title, d.description, ud.created_at, ud.created_at from %s as d "+
 			"left join "+
 			"%s as ud on "+
 			"ud.doc_id=d.id where ud.uid= ? and d.id= ?",
@@ -100,8 +103,9 @@ func (m *customDocumentsModel) FindOneByUIDAndDocID(ctx context.Context, session
 	var err error
 	if session != nil {
 		err = session.QueryRowCtx(ctx, &resp, query, userID, docID)
+	} else {
+		err = m.conn.QueryRowCtx(ctx, &resp, query, userID, docID)
 	}
-	err = m.conn.QueryRowCtx(ctx, &resp, query, userID, docID)
 	switch err {
 	case nil:
 		return &resp, nil

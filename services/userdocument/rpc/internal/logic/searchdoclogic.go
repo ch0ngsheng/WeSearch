@@ -45,6 +45,8 @@ func (l *SearchDocLogic) SearchDoc(in *pb.DocumentSearchReq) (*pb.DocumentSearch
 			log.Printf("findByUID, err: %v\n", err)
 			return err
 		}
+
+		log.Printf("find %d docs for user %d\n", len(myDocs), user.Id)
 		if len(myDocs) == 0 {
 			return nil
 		}
@@ -75,7 +77,7 @@ func (l *SearchDocLogic) SearchDoc(in *pb.DocumentSearchReq) (*pb.DocumentSearch
 			matchDocID, _ := strconv.ParseInt(item.DocID, 10, 64)
 			docInfo, err := l.svcCtx.DocModel.FindOneByUIDAndDocID(ctx, session, user.Id, matchDocID)
 			if err != nil {
-				log.Printf("using doc id %s to find doc, err: %v", matchDocID, err)
+				log.Printf("using doc id %d to find doc, err: %v", matchDocID, err)
 				return err
 			}
 			matchDocs = append(matchDocs, &pb.DocItem{

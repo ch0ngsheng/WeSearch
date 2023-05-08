@@ -20,8 +20,9 @@ func (m *default{{.upperStartCamelObject}}Model) FindOne(ctx context.Context, se
 	var err error
 	if session!=nil {
 	    err = session.QueryRowCtx(ctx, &resp, query, {{.lowerStartCamelPrimaryKey}})
+	} else {
+	    err = m.conn.QueryRowCtx(ctx, &resp, query, {{.lowerStartCamelPrimaryKey}})
 	}
-	err = m.conn.QueryRowCtx(ctx, &resp, query, {{.lowerStartCamelPrimaryKey}})
 	switch err {
 	case nil:
 		return &resp, nil
