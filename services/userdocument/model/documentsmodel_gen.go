@@ -43,6 +43,7 @@ type (
 		Title       sql.NullString `db:"title"`       // document title
 		Description sql.NullString `db:"description"` // document description
 		CreatedAt   time.Time      `db:"created_at"`  // document collect time
+		UpdatedAt   time.Time      `db:"updated_at"`  // document update time
 	}
 )
 

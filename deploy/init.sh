@@ -41,7 +41,7 @@ echo "elasticsearch & kibana"
 mkdir -p /home/wesearch/elasticsearch/{config,data,logs,plugins}
 mkdir -p /home/wesearch/kibana/{config,data,logs,plugins}
 
-mv /tmp/deploy/es/* /home/wesearch/elasticsearch/config
+cp /tmp/deploy/es/* /home/wesearch/elasticsearch/config
 touch /home/wesearch/elasticsearch/config/users
 touch /home/wesearch/elasticsearch/config/users_roles
 

@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"log"
+	"sort"
 
 	"github.com/zeromicro/go-zero/core/logx"
 
@@ -39,6 +40,9 @@ func (l *SearchLogic) Search(in *pb.SearchReq) (*pb.SearchResp, error) {
 		log.Printf("search failed, err: %v\n", err)
 		return nil, err
 	}
+
+	// 按score倒序
+	sort.Sort(res)
 
 	resp := &pb.SearchResp{
 		UID: in.UID,

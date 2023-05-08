@@ -19,7 +19,7 @@ Kafka:
 
 Elasticsearch:
   Addresses:
-    - elasticsearch:9200
+    - https://elasticsearch:9200
   APIKey:
   Index: wesearch
 

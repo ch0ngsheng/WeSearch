@@ -17,11 +17,11 @@ services:
     image: "yuchsh/wesearch-userdoc:latest"
     container_name: userdoc
     environment:
-      - POD_IP=172.22.2.1 # tell ETCD my IP by go-zero, for manager access from dmz net plane.
+      - POD_IP=172.22.2.3 # tell ETCD my IP by go-zero, for manager access from dmz net plane.
     networks:
       wesearch_internal:
       wesearch_dmz:
-        ipv4_address: 172.22.2.1
+        ipv4_address: 172.22.2.3
     volumes:
       - /home/wesearch/etc:/app/etc
       - /home/wesearch/certs:/app/certs

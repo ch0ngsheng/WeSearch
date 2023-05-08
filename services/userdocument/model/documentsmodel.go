@@ -64,7 +64,7 @@ func (m *customDocumentsModel) FindByUID(ctx context.Context, session sqlx.Sessi
 	var resp []*Documents
 
 	query := fmt.Sprintf(
-		"select d.id, d.url, d.hash, d.title, d.description, ud.created_at from %s as d "+
+		"select d.id, d.url, d.hash, d.title, d.description, ud.created_at, ud.created_at from %s as d "+
 			"left join "+
 			"%s as ud on "+
 			"ud.doc_id=d.id where ud.uid= ?",

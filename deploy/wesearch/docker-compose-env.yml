@@ -88,6 +88,8 @@ services:
     container_name: mysql
     image: mysql:5.7.31
     restart: always
+    networks:
+      - internal
     privileged: true
     volumes:
       - /home/wesearch/mysql/log:/var/log/mysql

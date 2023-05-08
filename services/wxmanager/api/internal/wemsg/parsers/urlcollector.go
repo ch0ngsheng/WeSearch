@@ -20,7 +20,7 @@ type urlCollector struct {
 
 func (u urlCollector) Parse(obj *HandlerObj, msg *message.MixMessage) (string, error) {
 	req := &pb.DocumentCollectReq{
-		WxUID: msg.OpenID,
+		WxUID: string(msg.FromUserName),
 		URL:   msg.Content,
 	}
 	_, err := obj.UserDocRpc.CreateDoc(context.Background(), req)

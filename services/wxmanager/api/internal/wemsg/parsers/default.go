@@ -16,5 +16,5 @@ func (d defaultParser) Prefix() string {
 }
 
 func NewDefaultParser() Parser {
-	return &urlCollector{prefix: ""}
+	return &defaultParser{}
 }

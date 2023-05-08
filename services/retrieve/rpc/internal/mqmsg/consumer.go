@@ -22,6 +22,7 @@ func NewConsumer(svcCtx *svc.ServiceContext) Consumer {
 }
 
 type docCreator struct {
+	// mark 将依赖的对象作为属性，在New方法中引入，这样就不需要加到接口参数中了。
 	svcCtx *svc.ServiceContext
 }
 

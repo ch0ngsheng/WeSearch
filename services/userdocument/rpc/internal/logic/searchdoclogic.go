@@ -42,6 +42,7 @@ func (l *SearchDocLogic) SearchDoc(in *pb.DocumentSearchReq) (*pb.DocumentSearch
 
 		myDocs, err := l.svcCtx.DocModel.FindByUID(ctx, session, user.Id)
 		if err != nil {
+			log.Printf("findByUID, err: %v\n", err)
 			return err
 		}
 		if len(myDocs) == 0 {

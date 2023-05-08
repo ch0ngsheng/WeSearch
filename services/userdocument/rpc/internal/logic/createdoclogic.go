@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"crypto/md5"
+	"fmt"
 	"time"
 
 	"github.com/zeromicro/go-zero/core/hash"
@@ -43,7 +45,7 @@ func (l *CreateDocLogic) CreateDoc(in *pb.DocumentCollectReq) (*pb.DocumentColle
 		// 创建document并绑定关系
 		docParam := &model.Documents{
 			Url:  in.GetURL(),
-			Hash: string(hash.Md5([]byte(in.GetURL()))),
+			Hash: calculateMD5(in.GetURL()),
 		}
 		newDoc, err := l.findOrCreateDoc(user.Id, session, docParam)
 		if err != nil {
@@ -133,4 +135,8 @@ func buildNewUser(openID string) *model.Users {
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
+}
+
+func calculateMD5(str string) string {
+	return fmt.Sprintf("%x", md5.Sum(hash.Md5([]byte(str))))
 }

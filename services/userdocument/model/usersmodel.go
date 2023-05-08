@@ -41,7 +41,7 @@ func (m *defaultUsersModel) Trans(ctx context.Context, fn func(ctx context.Conte
 }
 
 func (m *customUsersModel) UpdateTimeByID(ctx context.Context, session sqlx.Session, newData *Users) (sql.Result, error) {
-	query := fmt.Sprintf("update %s set updated_time=? where `id` = ?", m.table)
+	query := fmt.Sprintf("update %s set updated_at=? where `id` = ?", m.table)
 	if session != nil {
 		return session.ExecCtx(ctx, query, newData.UpdatedAt, newData.Id)
 	}

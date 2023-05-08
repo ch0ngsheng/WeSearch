@@ -31,6 +31,8 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		Producer:     mq.MustNewMqProducer(c.Kafka.Brokers),
 		Consumer:     mq.MustNewMqConsumer(c.Kafka.Brokers),
 		UserDocModel: model.NewUserDocsModel(conn),
+		UserModel:    model.NewUsersModel(conn),
+		DocModel:     model.NewDocumentsModel(conn),
 		RetrieveRpc:  retrieve.NewRetrieve(zrpc.MustNewClient(c.RetrieveRpcConf)),
 	}
 }
