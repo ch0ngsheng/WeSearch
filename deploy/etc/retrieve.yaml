@@ -1,6 +1,14 @@
 Name: retrieve.rpc
 ListenOn: 0.0.0.0:7003
 Version: 0.0.1
+Log:
+  ServiceName: retrieve
+  Mode: file
+  Path: logs/
+  Level: info
+  Stat: true
+  KeepDays: 20
+  Rotation: daily
 Etcd:
   Hosts:
     - 1.etcd:2379

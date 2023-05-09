@@ -18,6 +18,7 @@ type (
 	DocumentCollectResp = pb.DocumentCollectResp
 	DocumentSearchReq   = pb.DocumentSearchReq
 	DocumentSearchResp  = pb.DocumentSearchResp
+	ErrorResp           = pb.ErrorResp
 	FindDocInfo         = pb.FindDocInfo
 	FindUserDocReq      = pb.FindUserDocReq
 	FindUserDocResp     = pb.FindUserDocResp

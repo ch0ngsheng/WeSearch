@@ -15,6 +15,7 @@ import (
 type (
 	DocumentCreateReq  = pb.DocumentCreateReq
 	DocumentCreateResp = pb.DocumentCreateResp
+	ErrorResp          = pb.ErrorResp
 	SearchItem         = pb.SearchItem
 	SearchReq          = pb.SearchReq
 	SearchResp         = pb.SearchResp

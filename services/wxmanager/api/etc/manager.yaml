@@ -1,6 +1,14 @@
 Name: manager
 Host: 0.0.0.0
 Port: 7001
+Log:
+  ServiceName: manager
+  Mode: file
+  Path: logs/
+  Level: info
+  Stat: true
+  KeepDays: 20
+  Rotation: daily
 
 WeChat:
   AppID:
@@ -13,9 +21,9 @@ UserDocRpcConf:
     Hosts:
       - 1.etcd:2379
     Key: userdoc.rpc
-    CertFile: certs/ca.crt
+    CertFile: certs/etcd-client.crt
     CertKeyFile: certs/etcd-client.key
-    CACertFile: certs/etcd-ca.crt
+    CACertFile: certs/ca.crt
     InsecureSkipVerify: false
 
 WeSearch:

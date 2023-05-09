@@ -1,13 +1,21 @@
 Name: retrieve.rpc
 ListenOn: 0.0.0.0:7003
 Version: 0.0.1
+Log:
+  ServiceName: retrieve
+  Mode: file
+  Path: logs/
+  Level: info
+  Stat: true
+  KeepDays: 20
+  Rotation: daily
 Etcd:
   Hosts:
     - 1.etcd:2379
   Key: retrieve.rpc
-  CertFile: certs/ca.crt
+  CertFile: certs/etcd-client.crt
   CertKeyFile: certs/etcd-client.key
-  CACertFile: certs/etcd-ca.crt
+  CACertFile: certs/ca.crt
   InsecureSkipVerify: false
 
 Kafka:

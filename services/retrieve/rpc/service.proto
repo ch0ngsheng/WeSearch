@@ -4,6 +4,13 @@ package retrieve;
 
 option go_package = "rpc/pb";
 
+// Error
+message ErrorResp {
+  uint32 ErrCode = 1;
+  string ErrMsg = 2;
+  string Detail = 3;
+}
+
 // Version
 message VersionReq {
 }

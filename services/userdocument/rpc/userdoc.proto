@@ -6,6 +6,13 @@ option go_package = "rpc/pb";
 
 import "google/protobuf/timestamp.proto";
 
+// Error
+message ErrorResp {
+  uint32 ErrCode = 1;
+  string ErrMsg = 2;
+  string Detail = 3;
+}
+
 // Version
 message VersionReq {
 }

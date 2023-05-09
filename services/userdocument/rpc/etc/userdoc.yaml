@@ -1,12 +1,28 @@
 Name: userdoc.rpc
 ListenOn: 0.0.0.0:7002
+Log:
+  ServiceName: userdoc
+  Mode: file
+  Path: logs/
+  Level: info
+  Stat: true
+  KeepDays: 20
+  Rotation: daily
+Middlewares:
+  Trace: true
+  Recover: true
+  Stat: true
+  StatConf:
+    SlowThreshold: 500ms
+  Prometheus: false
+  Breaker: true
 Etcd:
   Hosts:
   - 1.etcd:2379
   Key: userdoc.rpc
-  CertFile: certs/ca.crt
+  CertFile: certs/etcd-client.crt
   CertKeyFile: certs/etcd-client.key
-  CACertFile: certs/etcd-ca.crt
+  CACertFile: certs/ca.crt
   InsecureSkipVerify: false
 Mysql:
   DataSource: root:123456@tcp(mysql:3306)/wesearch?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
@@ -17,11 +33,20 @@ Kafka:
   TopicParseDoc: parse-doc
   ConsumerGroup: userdoc
 RetrieveRpcConf:
+  NonBlock: false # 是否异步建立连接
+  Timeout: 4s # RPC请求超时
+  KeepaliveTime: 10s # gRPC内部最低10s
+  Middlewares:
+    Trace: true
+    Duration: true # 请求处理时间
+    Prometheus: false
+    Breaker: true
+    Timeout: true # 限制RPC请求超时时间，阈值为上面的Timeout值
   Etcd:
     Hosts:
       - 1.etcd:2379
     Key: retrieve.rpc
-    CertFile: certs/ca.crt
+    CertFile: certs/etcd-client.crt
     CertKeyFile: certs/etcd-client.key
-    CACertFile: certs/etcd-ca.crt
+    CACertFile: certs/ca.crt
     InsecureSkipVerify: false

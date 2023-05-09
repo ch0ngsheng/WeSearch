@@ -1,6 +1,14 @@
 Name: manager
 Host: 0.0.0.0
 Port: 7001
+Log:
+  ServiceName: manager
+  Mode: file
+  Path: logs/
+  Level: info
+  Stat: true
+  KeepDays: 20
+  Rotation: daily
 
 WeChat:
   AppID:
