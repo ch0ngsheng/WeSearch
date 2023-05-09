@@ -3,7 +3,7 @@ package mq
 import (
 	"log"
 	"time"
-	
+
 	"github.com/zeromicro/go-zero/core/logx"
 )
 

@@ -17,6 +17,12 @@ WeChat:
   EncodingAESKey:
 
 UserDocRpcConf:
+  Middlewares:
+    Trace: true
+    Duration: true # 请求处理时间
+    Prometheus: false
+    Breaker: true
+    Timeout: true # 限制RPC请求超时时间，阈值为上面的Timeout值
   Etcd:
     Hosts:
       - 1.etcd:2379
