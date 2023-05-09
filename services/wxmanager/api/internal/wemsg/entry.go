@@ -1,10 +1,10 @@
 package wemsg
 
 import (
-	"log"
 	"strings"
 
 	"github.com/silenceper/wechat/v2/officialaccount/message"
+	"github.com/zeromicro/go-zero/core/logx"
 
 	"chongsheng.art/wesearch/services/wxmanager/api/internal/config"
 	"chongsheng.art/wesearch/services/wxmanager/api/internal/wemsg/parsers"
@@ -32,7 +32,7 @@ type handler struct {
 }
 
 func (h handler) Do(msg *message.MixMessage) *message.Reply {
-	log.Printf("recv: %s\n", msg.Content)
+	logx.Infof("recv WX message: %s", msg.Content)
 
 	var key = ""
 	for _, pp := range h.matchOrder {
@@ -43,9 +43,11 @@ func (h handler) Do(msg *message.MixMessage) *message.Reply {
 
 	resp, err := h.parsers[key].Parse(h.obj, msg)
 	if err != nil {
+		logx.Errorf("Handle WX message, %+v", err)
 		return &message.Reply{MsgType: message.MsgTypeText, MsgData: message.NewText("system error")}
 	}
 
+	logx.Infof("response WX message.")
 	return &message.Reply{MsgType: message.MsgTypeText, MsgData: message.NewText(resp)}
 }
 

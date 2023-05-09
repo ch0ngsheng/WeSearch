@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"log"
 	"sort"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -37,7 +36,6 @@ func (l *SearchLogic) Search(in *pb.SearchReq) (*pb.SearchResp, error) {
 		Keywords:  in.KeyWords,
 	})
 	if err != nil {
-		log.Printf("search failed, err: %v\n", err)
 		return nil, err
 	}
 
@@ -53,6 +51,6 @@ func (l *SearchLogic) Search(in *pb.SearchReq) (*pb.SearchResp, error) {
 			Score: item.Score,
 		})
 	}
-	log.Printf("search for user %s, keyword %s\n, docs %s. resp: %v", in.UID, in.KeyWords, in.DocIDs, resp)
+	logx.Infof("search for user %s, keyword %s, docs %s, resp: %v", in.UID, in.KeyWords, in.DocIDs, resp)
 	return resp, nil
 }

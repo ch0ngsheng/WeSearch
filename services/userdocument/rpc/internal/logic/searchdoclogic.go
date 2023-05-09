@@ -6,9 +6,9 @@ import (
 	"chongsheng.art/wesearch/services/userdocument/rpc/pb"
 	"context"
 	"fmt"
+	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"log"
 	"strconv"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -37,16 +37,15 @@ func (l *SearchDocLogic) SearchDoc(in *pb.DocumentSearchReq) (*pb.DocumentSearch
 			return nil
 		}
 		if err != nil {
-			return err
+			return errors.Wrap(err, "find user by openid")
 		}
 
 		myDocs, err := l.svcCtx.DocModel.FindByUID(ctx, session, user.Id)
 		if err != nil {
-			log.Printf("findByUID, err: %v\n", err)
-			return err
+			return errors.Wrap(err, "find doc by uid.")
 		}
 
-		log.Printf("find %d docs for user %d\n", len(myDocs), user.Id)
+		logx.Infof("find %d docs for user %d", len(myDocs), user.Id)
 		if len(myDocs) == 0 {
 			return nil
 		}
@@ -77,8 +76,7 @@ func (l *SearchDocLogic) SearchDoc(in *pb.DocumentSearchReq) (*pb.DocumentSearch
 			matchDocID, _ := strconv.ParseInt(item.DocID, 10, 64)
 			docInfo, err := l.svcCtx.DocModel.FindOneByUIDAndDocID(ctx, session, user.Id, matchDocID)
 			if err != nil {
-				log.Printf("using doc id %d to find doc, err: %v", matchDocID, err)
-				return err
+				return errors.Wrap(err, fmt.Sprintf("using doc id %d to find doc", matchDocID))
 			}
 			matchDocs = append(matchDocs, &pb.DocItem{
 				URL:         docInfo.Url,
@@ -92,7 +90,8 @@ func (l *SearchDocLogic) SearchDoc(in *pb.DocumentSearchReq) (*pb.DocumentSearch
 		return nil
 	})
 	if err != nil {
-		return nil, err
+		logx.Errorf("search doc transaction, %+v", err)
+		return nil, errors.Wrap(err, "search doc transaction.")
 	}
 
 	return resp, nil

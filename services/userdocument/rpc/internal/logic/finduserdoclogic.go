@@ -1,13 +1,15 @@
 package logic
 
 import (
-	"chongsheng.art/wesearch/services/userdocument/rpc/internal/svc"
-	"chongsheng.art/wesearch/services/userdocument/rpc/pb"
 	"context"
+
+	"github.com/pkg/errors"
+	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	"github.com/zeromicro/go-zero/core/logx"
+	"chongsheng.art/wesearch/services/userdocument/rpc/internal/svc"
+	"chongsheng.art/wesearch/services/userdocument/rpc/pb"
 )
 
 type FindUserDocLogic struct {
@@ -35,12 +37,12 @@ func (l *FindUserDocLogic) FindUserDoc(in *pb.FindUserDocReq) (*pb.FindUserDocRe
 			return nil
 		}
 		if err != nil {
-			return err
+			return errors.Wrap(err, "find user by open id.")
 		}
 
 		docs, err := l.svcCtx.DocModel.FindByUID(l.ctx, session, user.Id)
 		if err != nil {
-			return err
+			return errors.Wrap(err, "find doc by uid.")
 		}
 
 		resp.List = make([]*pb.FindDocInfo, 0, len(docs))
@@ -55,7 +57,8 @@ func (l *FindUserDocLogic) FindUserDoc(in *pb.FindUserDocReq) (*pb.FindUserDocRe
 	})
 
 	if err != nil {
-		return nil, err
+		logx.Errorf("find user doc transaction, %+v", err)
+		return nil, errors.Wrap(err, "find user doc transaction.")
 	}
 
 	return resp, nil

@@ -1,13 +1,15 @@
 package mqmsg
 
 import (
-	"chongsheng.art/wesearch/internal/htmlutil"
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
+
+	"github.com/pkg/errors"
+	"github.com/zeromicro/go-zero/core/logx"
 
 	"chongsheng.art/wesearch/internal/esutil"
+	"chongsheng.art/wesearch/internal/htmlutil"
 	"chongsheng.art/wesearch/internal/message"
 	"chongsheng.art/wesearch/internal/mq"
 	"chongsheng.art/wesearch/services/retrieve/rpc/internal/svc"
@@ -30,8 +32,7 @@ type docCreator struct {
 func (d docCreator) ReadCreateDocMessage(data []byte) error {
 	msg := &message.DocCollection{}
 	if err := json.Unmarshal(data, msg); err != nil {
-		log.Printf("failed to unmarshal kafka msg %s, err: %v", data, err)
-		return err
+		return errors.Wrap(err, fmt.Sprintf("failed to unmarshal kafka msg %s, err: %v", data, err))
 	}
 
 	article, err := htmlutil.Parse(msg.URL)
@@ -57,8 +58,7 @@ func (d docCreator) ReadCreateDocMessage(data []byte) error {
 		Description: article.Desc,
 	})
 	if err != nil {
-		log.Printf("failed to marshal doc analysis msg, err: %v\n", err)
-		return err
+		return errors.Wrap(err, fmt.Sprintf("failed to marshal doc analysis msg for kafka, err: %v\n", err))
 	}
 	return d.svcCtx.Producer.Send(d.svcCtx.Config.Kafka.TopicParseDoc, docMsg)
 }
@@ -67,6 +67,11 @@ func MustStartConsumer(cfg message.KafkaConfig, fn func(msg []byte) error) {
 	consumer := mq.MustNewMqConsumer(cfg.Brokers)
 
 	go func() {
+		defer func() {
+			if err := recover(); err != nil {
+				logx.Errorf("kafka consumer panic, %+v", err)
+			}
+		}()
 		consumer.Consume(cfg.ConsumerGroup, cfg.TopicCreateDoc, fn)
 	}()
 }

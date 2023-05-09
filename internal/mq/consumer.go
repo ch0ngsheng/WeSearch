@@ -1,13 +1,12 @@
 package mq
 
 import (
-	"fmt"
 	"io"
-	"log"
 	"sync"
 	"time"
 
 	"github.com/Shopify/sarama"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type Consumer interface {
@@ -30,7 +29,7 @@ func (k kafkaConsumer) Consume(group, topic string, fn func(msg []byte) error) {
 	RetryWith("get-partitions", time.Second*2, 60, func() error {
 		partitions, err = k.client.Partitions(topic)
 		if err != nil {
-			log.Printf("fail to list partitions, %v", err)
+			logx.Errorf("fail to list partitions, %+v", err)
 		}
 		return err
 	})
@@ -38,7 +37,15 @@ func (k kafkaConsumer) Consume(group, topic string, fn func(msg []byte) error) {
 	var wg sync.WaitGroup
 	wg.Add(len(partitions))
 	for _, partitionId := range partitions {
-		go k.consumeByPartition(&wg, group, topic, partitionId, fn)
+		go func(partitionId int32) {
+			defer func() {
+				if err := recover(); err != nil {
+					logx.Errorf("consumer kafka message encounter an error, %+v", err)
+				}
+			}()
+
+			k.consumeByPartition(&wg, group, topic, partitionId, fn)
+		}(partitionId)
 	}
 
 	wg.Wait()
@@ -53,7 +60,7 @@ func (k kafkaConsumer) consumeByPartition(wg *sync.WaitGroup, group, topic strin
 	RetryWith("offset-manager", time.Second*2, 60, func() error {
 		offsetManager, err = sarama.NewOffsetManagerFromClient(group, k.client)
 		if err != nil {
-			log.Println("NewOffsetManagerFromClient err:", err)
+			logx.Errorf("NewOffsetManagerFromClient err:", err)
 		}
 		return err
 	})
@@ -64,7 +71,7 @@ func (k kafkaConsumer) consumeByPartition(wg *sync.WaitGroup, group, topic strin
 	RetryWith("partition-offset-manager", time.Second*2, 60, func() error {
 		partitionOffsetManager, err = offsetManager.ManagePartition(topic, partitionId)
 		if err != nil {
-			log.Println("ManagePartition err:", err)
+			logx.Errorf("ManagePartition err:", err)
 		}
 		return err
 	})
@@ -80,7 +87,7 @@ func (k kafkaConsumer) consumeByPartition(wg *sync.WaitGroup, group, topic strin
 	RetryWith("get-consumer", time.Second*2, 60, func() error {
 		consumer, err = sarama.NewConsumerFromClient(k.client)
 		if err != nil {
-			log.Println("NewConsumerFromClient err:", err)
+			logx.Errorf("NewConsumerFromClient err:", err)
 			return err
 		}
 
@@ -89,22 +96,21 @@ func (k kafkaConsumer) consumeByPartition(wg *sync.WaitGroup, group, topic strin
 
 		partitionConsumer, err = consumer.ConsumePartition(topic, partitionId, nextOffset)
 		if err != nil {
-			log.Println("ConsumePartition err:", err)
+			logx.Errorf("ConsumePartition err:", err)
 			return err
 		}
 
 		return nil
 	})
 	defer partitionConsumer.Close()
-	fmt.Println("nextOffset:", nextOffset)
 
 	for message := range partitionConsumer.Messages() {
 		value := string(message.Value)
-		log.Printf("[Consumer] group %s, partitionId: %d, offset:%d, value: %s\n", group, message.Partition, message.Offset, value)
+		logx.Infof("[Consumer] group %s, partitionId: %d, offset:%d, value: %s\n", group, message.Partition, message.Offset, value)
 
 		// 业务回调
 		if err = fn(message.Value); err != nil {
-			log.Printf("fail to process message: %s, error: %v", value, err)
+			logx.Errorf("fail to process message: %s, error: %+v", value, err)
 		}
 
 		// 每次消费后都更新一次 offset。这里更新的只是内存中的值，需要 commit 之后才能提交到 kafka

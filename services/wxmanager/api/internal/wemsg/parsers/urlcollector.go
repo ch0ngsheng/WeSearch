@@ -2,9 +2,10 @@ package parsers
 
 import (
 	"context"
-	"log"
-
+	
+	"github.com/pkg/errors"
 	"github.com/silenceper/wechat/v2/officialaccount/message"
+	"github.com/zeromicro/go-zero/core/logx"
 
 	"chongsheng.art/wesearch/services/userdocument/rpc/pb"
 )
@@ -25,8 +26,8 @@ func (u urlCollector) Parse(obj *HandlerObj, msg *message.MixMessage) (string, e
 	}
 	_, err := obj.UserDocRpc.CreateDoc(context.Background(), req)
 	if err != nil {
-		log.Printf("create doc, %v\n", err)
-		return "", err
+		logx.Errorf("create doc, %v\n", err)
+		return "", errors.Wrap(err, "create doc.")
 	}
 
 	return "ok", nil

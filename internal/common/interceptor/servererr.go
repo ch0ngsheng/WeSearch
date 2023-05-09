@@ -2,10 +2,9 @@ package interceptor
 
 import (
 	"context"
-	"log"
-
 	"github.com/golang/protobuf/proto"
 	"github.com/pkg/errors"
+	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -40,7 +39,7 @@ func (sei severErrInterceptor) do(ctx context.Context, req interface{}, info *gr
 	default:
 		// internal error
 		s := status.New(codes.Code(xerror.InternalErr.GetCode()), xerror.InternalErr.GetMsg())
-		log.Printf("internal server error: %+v", err)
+		logx.Info("internal server error: %+v", err)
 		return resp, s.Err()
 	}
 }

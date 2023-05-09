@@ -3,11 +3,11 @@ package esutil
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
+
+	"github.com/pkg/errors"
 
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/core/search"
@@ -57,23 +57,19 @@ func (e esClient) CreateDoc(ctx context.Context, req *CreateDocReq) error {
 
 	respBody, err := io.ReadAll(res.Body)
 	if err != nil {
-		log.Printf("fail to read body, err: %v\n", err)
-		return err
+		return errors.Wrap(err, fmt.Sprintf("fail to read body, err: %v", err))
 	}
 	defer res.Body.Close()
 
 	if res.StatusCode != http.StatusOK && res.StatusCode != http.StatusCreated {
-		log.Printf("response status %d not expected, %s", res.StatusCode, respBody)
-		return fmt.Errorf("response status not expected, %s", respBody)
+		return errors.New(fmt.Sprintf("response status %d not expected, %s", res.StatusCode, respBody))
 	}
 
 	createResp := &createDocResp{}
 	if err = json.Unmarshal(respBody, createResp); err != nil {
-		log.Printf("failed to unmarshal resp body when create doc %s", respBody)
-		return err
+		return errors.Wrap(err, fmt.Sprintf("failed to unmarshal resp body when create doc %s", respBody))
 	}
 
-	log.Printf("doc created result %s\n", createResp.Result)
 	return nil
 }
 
@@ -108,25 +104,22 @@ func (e esClient) Search(ctx context.Context, req *SearchDocReq) (*SearchDocResp
 			MinScore: &minScore,
 		}).Do(ctx)
 	if err != nil {
-		log.Printf("failed to search %v\n", err)
-		return nil, err
+		return nil, errors.Wrap(err, fmt.Sprintf("failed to search %v", err))
 	}
 
 	searchRes, err := io.ReadAll(res.Body)
 	if err != nil {
-		log.Printf("read search body, err: %v\n", err)
-		return nil, err
+		return nil, errors.Wrap(err, fmt.Sprintf("read search resp body, err: %v", err))
 	}
 	defer res.Body.Close()
 
 	if res.StatusCode != http.StatusOK {
-		log.Printf("seach status not ok, %s", searchRes)
-		return nil, errors.New("search failed")
+		return nil, errors.New(fmt.Sprintf("search failed, status %d", res.StatusCode))
 	}
 
 	resp := &searchResp{}
 	if err = json.Unmarshal(searchRes, resp); err != nil {
-		log.Printf("failed to unmarshal search resp %s, %v", searchRes, err)
+		return nil, errors.Wrap(err, fmt.Sprintf("failed to unmarshal search resp %s, %v", searchRes, err))
 	}
 
 	list := buildRespDocIDList(resp)

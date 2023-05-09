@@ -2,15 +2,15 @@ package htmlutil
 
 import (
 	"crypto/tls"
-	"errors"
 	"fmt"
-	"log"
 	"net"
 	"net/http"
 	"strings"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/pkg/errors"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type Article struct {
@@ -32,32 +32,39 @@ func Parse(url string) (*Article, error) {
 
 	res, err := wxHTTPClient.Get(url)
 	if err != nil {
-		log.Printf("failed to request %s, err: %v\n", url, err)
-		return nil, err
+		return nil, errors.Wrap(err, fmt.Sprintf("failed to request %s", url))
 	}
 	defer res.Body.Close()
 	if res.StatusCode != http.StatusOK {
-		log.Printf("status code error: %d %s, %s", res.StatusCode, res.Status, url)
-		return nil, errors.New("http response status error")
+		return nil, errors.New(fmt.Sprintf("request url %s, response status not 200.", url))
 	}
 
 	// 加载 HTML document
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
-		log.Printf("failed to load html body, err: %s, url: %s", err, url)
-		return nil, err
+		return nil, errors.Wrap(err, "load html body")
 	}
 
 	art := &Article{URL: url}
 	doc.Find("meta").Each(func(i int, s *goquery.Selection) {
+		var isExist bool
 		if name, _ := s.Attr("property"); strings.EqualFold(name, "og:title") {
-			art.Title, _ = s.Attr("content")
+			art.Title, isExist = s.Attr("content")
+			if !isExist {
+				logx.Errorf("url %s doesn't contain content mark.")
+			}
 		}
 		if name, _ := s.Attr("property"); strings.EqualFold(name, "og:description") {
-			art.Desc, _ = s.Attr("content")
+			art.Desc, isExist = s.Attr("content")
+			if !isExist {
+				logx.Errorf("url %s doesn't contain description mark.")
+			}
 		}
 		if name, _ := s.Attr("property"); strings.EqualFold(name, "og:article:author") {
-			art.Author, _ = s.Attr("content")
+			art.Author, isExist = s.Attr("content")
+			if !isExist {
+				logx.Errorf("url %s doesn't contain author mark.")
+			}
 		}
 	})
 

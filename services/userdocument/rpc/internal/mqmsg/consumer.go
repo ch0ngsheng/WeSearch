@@ -4,8 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
-	"log"
+	"fmt"
 
+	"github.com/pkg/errors"
+	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 
 	"chongsheng.art/wesearch/internal/message"
@@ -28,16 +30,17 @@ func NewConsumerObj(svcCtx *svc.ServiceContext) Consumer {
 func (d docAnalysis) ReadDocAnalysisMessage(data []byte) error {
 	msg := &message.DocAnalysis{}
 	if err := json.Unmarshal(data, msg); err != nil {
-		log.Printf("msg unmarshal %v", err)
-		return err
+		return errors.Wrap(err, "msg unmarshal")
 	}
-	log.Printf("rec: docID %d, title %s, description %s", msg.DocID, msg.Title, msg.Description)
+	logx.Infof("receive from kafka: docID %d, title %s, description %s.", msg.DocID, msg.Title, msg.Description)
 
 	err := d.svcCtx.DocModel.Trans(context.Background(), func(ctx context.Context, session sqlx.Session) error {
 		doc, err := d.svcCtx.DocModel.FindOne(ctx, session, msg.DocID)
+		if err == sqlx.ErrNotFound {
+			return errors.New(fmt.Sprintf("doc id %d not found, title is %s", msg.DocID, msg.Title))
+		}
 		if err != nil {
-			log.Fatalf("doc id %d from retrieve not found, title is %s.\n", msg.DocID, msg.Title)
-			return err
+			return errors.Wrap(err, "find one doc.")
 		}
 
 		// mark Update默认使用参数doc对象的所有字段值，更新数据库对应记录的所有字段
@@ -46,12 +49,13 @@ func (d docAnalysis) ReadDocAnalysisMessage(data []byte) error {
 		doc.Description = sql.NullString{String: msg.Description, Valid: true}
 
 		if _, err := d.svcCtx.DocModel.Update(ctx, session, doc); err != nil {
-			return err
+			return errors.Wrap(err, "update doc.")
 		}
 		return nil
 	})
 	if err != nil {
-		log.Printf("failed to update doc info, err: %v\n", err)
+		logx.Errorf("update doc transaction, err: %+v", err)
+		return errors.Wrap(err, "update doc transaction.")
 	}
 
 	return nil
@@ -61,6 +65,11 @@ func MustStartConsumer(cfg message.KafkaConfig, fn func(msg []byte) error) {
 	consumer := mq.MustNewMqConsumer(cfg.Brokers)
 
 	go func() {
+		defer func() {
+			if err := recover(); err != nil {
+				logx.Errorf("kafka consumer panic, %+v", err)
+			}
+		}()
 		consumer.Consume(cfg.ConsumerGroup, cfg.TopicParseDoc, fn)
 	}()
 }

@@ -2,9 +2,9 @@ package mq
 
 import (
 	"io"
-	"log"
 
 	"github.com/Shopify/sarama"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type Producer interface {
@@ -26,6 +26,6 @@ func (p kafkaProducer) Send(topic string, data []byte) error {
 		Value: sarama.ByteEncoder(data),
 	}
 	partition, offset, err := p.client.SendMessage(msg)
-	log.Printf("kafka send message, partition: %d, offset: %d", partition, offset)
+	logx.Infof("kafka send message, partition: %d, offset: %d", partition, offset)
 	return err
 }

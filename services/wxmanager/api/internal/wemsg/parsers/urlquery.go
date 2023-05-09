@@ -1,13 +1,16 @@
 package parsers
 
 import (
-	"chongsheng.art/wesearch/services/userdocument/rpc/userdocument"
 	"context"
 	"fmt"
-	"github.com/silenceper/wechat/v2/officialaccount/message"
-	"log"
 	"strings"
 	"time"
+
+	"github.com/pkg/errors"
+	"github.com/silenceper/wechat/v2/officialaccount/message"
+	"github.com/zeromicro/go-zero/core/logx"
+
+	"chongsheng.art/wesearch/services/userdocument/rpc/userdocument"
 )
 
 // NewUrlQueryParser 处理prefix开头的消息
@@ -28,8 +31,8 @@ func (u urlQuery) Parse(obj *HandlerObj, msg *message.MixMessage) (string, error
 		Keywords: u.getSearchKeywords(msg.Content),
 	})
 	if err != nil {
-		log.Printf("search error for %s, url: %s, err: %v\n", msg.OpenID, msg.Content, err)
-		return "", err
+		logx.Errorf("search error for %s, url: %s, err: %v\n", msg.OpenID, msg.Content, err)
+		return "", errors.Wrap(err, "rpc search doc")
 	}
 	return buildRespContent(resp), nil
 }

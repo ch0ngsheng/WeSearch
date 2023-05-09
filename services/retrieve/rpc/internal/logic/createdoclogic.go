@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"log"
 
 	"github.com/zeromicro/go-zero/core/logx"
 
@@ -31,8 +30,10 @@ func (l *CreateDocLogic) CreateDoc(in *pb.DocumentCreateReq) (*pb.DocumentCreate
 		Content: in.DocURL,
 	})
 	if err != nil {
+		logx.Errorf("create doc, %+v", err)
 		return nil, err
 	}
-	log.Printf("doc %s created.\n", in.DocID)
+
+	logx.Infof("doc %s %s created.", in.DocID, in.DocURL)
 	return &pb.DocumentCreateResp{DocID: in.DocID}, nil
 }

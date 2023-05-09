@@ -4,9 +4,9 @@ import (
 	"context"
 	"crypto/md5"
 	"fmt"
-	"log"
 	"time"
 
+	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/hash"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -58,12 +58,18 @@ func (l *CreateDocLogic) CreateDoc(in *pb.DocumentCollectReq) (*pb.DocumentColle
 		if err != nil {
 			return err
 		}
-		return l.svcCtx.Producer.Send(l.svcCtx.Config.Kafka.TopicCreateDoc, msg)
+		err = l.svcCtx.Producer.Send(l.svcCtx.Config.Kafka.TopicCreateDoc, msg)
+		if err != nil {
+			return errors.Wrap(err, "send kafka message.")
+		}
+
+		return nil
 	},
 	)
 
 	if err != nil {
-		return nil, err
+		logx.Errorf("create doc transaction, %+v", err)
+		return nil, errors.Wrap(err, "create doc transaction.")
 	}
 	return &pb.DocumentCollectResp{}, nil
 }
@@ -74,27 +80,27 @@ func (l *CreateDocLogic) findOrCreateUser(openID string, session sqlx.Session) (
 		user = buildNewUser(openID)
 		res, err := l.svcCtx.UserModel.Insert(l.ctx, session, user)
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "insert user.")
 		}
 		user.Id, _ = res.LastInsertId()
 		return user, nil
 	}
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "find user by open id.")
 	}
-	return user, err
+	return user, nil
 }
 
 func (l *CreateDocLogic) updateTime(user *model.Users, session sqlx.Session) error {
 	user.UpdatedAt = time.Now()
 	_, err := l.svcCtx.UserModel.UpdateTimeByID(l.ctx, session, user)
-	return err
+	return errors.Wrap(err, "update user by id")
 }
 
 func (l *CreateDocLogic) findOrCreateDoc(userID int64, session sqlx.Session, docParam *model.Documents) (*model.Documents, error) {
 	docs, err := l.svcCtx.DocModel.FindByUrlHash(l.ctx, session, docParam.Hash)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "find doc by url hash.")
 	}
 
 	var create bool
@@ -104,7 +110,7 @@ func (l *CreateDocLogic) findOrCreateDoc(userID int64, session sqlx.Session, doc
 	} else {
 		docParam, err = l.svcCtx.DocModel.FindOneByUrl(l.ctx, session, docParam.Url)
 		if err != nil && err != model.ErrNotFound {
-			return nil, err
+			return nil, errors.Wrap(err, "find doc by url.")
 		}
 		if err == model.ErrNotFound {
 			create = true
@@ -115,7 +121,7 @@ func (l *CreateDocLogic) findOrCreateDoc(userID int64, session sqlx.Session, doc
 		docParam.CreatedAt = time.Now()
 		rs, err := l.svcCtx.DocModel.Insert(l.ctx, session, docParam)
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "insert doc.")
 		}
 		docParam.Id, _ = rs.LastInsertId()
 	}
@@ -123,9 +129,9 @@ func (l *CreateDocLogic) findOrCreateDoc(userID int64, session sqlx.Session, doc
 	// 该用户已收藏该文档
 	oldDoc, err := l.svcCtx.DocModel.FindOneByUIDAndDocID(l.ctx, session, userID, docParam.Id)
 	if err != nil && err != sqlx.ErrNotFound {
-		log.Printf("query error, %v\n", err)
+		return nil, errors.Wrap(err, "find doc by uid and doc id.")
 	} else if err == nil {
-		log.Printf("user %d already collected doc %d\n", userID, docParam.Id)
+		logx.Infof("user %d already collected doc %d", userID, docParam.Id)
 		return oldDoc, nil
 	}
 	// not found
@@ -137,7 +143,7 @@ func (l *CreateDocLogic) findOrCreateDoc(userID int64, session sqlx.Session, doc
 	}
 	_, err = l.svcCtx.UserDocModel.Insert(l.ctx, session, userDoc)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "insert user doc.")
 	}
 	return docParam, nil
 }

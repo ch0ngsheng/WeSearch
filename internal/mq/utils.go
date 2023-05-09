@@ -3,6 +3,8 @@ package mq
 import (
 	"log"
 	"time"
+	
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 // RetryWith 重试， max=-1 means forever
@@ -23,7 +25,7 @@ func RetryWith(name string, interval time.Duration, max int, do func() error) {
 		}
 
 		ticker.Reset(interval)
-		log.Printf("%s failed, ttr: %d, err: %v", name, ttl, err)
+		logx.Errorf("%s failed, ttr: %d, err: %+v", name, ttl, err)
 		select {
 		case <-ticker.C:
 		}

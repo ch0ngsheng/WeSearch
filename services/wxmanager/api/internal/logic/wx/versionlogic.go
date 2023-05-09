@@ -2,8 +2,7 @@ package wx
 
 import (
 	"context"
-	"log"
-
+	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
 
 	"chongsheng.art/wesearch/services/userdocument/rpc/userdocument"
@@ -28,8 +27,8 @@ func NewVersionLogic(ctx context.Context, svcCtx *svc.ServiceContext) *VersionLo
 func (l *VersionLogic) Version() (resp *types.VersionResp, err error) {
 	res, err := l.svcCtx.UserDocRpc.Version(l.ctx, &userdocument.VersionReq{})
 	if err != nil {
-		log.Printf("rpc request Version, %v\n", err)
-		return nil, err
+		logx.Errorf("rpc request Version, %+v", err)
+		return nil, errors.Wrap(err, "rpc user doc.")
 	}
 	resp = &types.VersionResp{Version: res.Version}
 	return resp, nil

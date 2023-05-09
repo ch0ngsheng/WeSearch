@@ -5,7 +5,7 @@ import (
 	"github.com/silenceper/wechat/v2/cache"
 	"github.com/silenceper/wechat/v2/officialaccount"
 	"github.com/silenceper/wechat/v2/officialaccount/config"
-	"log"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type Config struct {
@@ -34,7 +34,7 @@ func NewOfficialAccount(wc *wechat.Wechat, cfg *Config) *OfficialAccount {
 		Token:          cfg.Token,
 		EncodingAESKey: cfg.EncodingAESKey,
 	}
-	log.Printf("offCfg=%+v", offCfg)
+	logx.Infof("new wechat client, appID: %s", offCfg.AppID)
 	officialAccount := wc.GetOfficialAccount(offCfg)
 	return &OfficialAccount{
 		Wechat:          wc,
