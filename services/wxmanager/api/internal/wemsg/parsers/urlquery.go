@@ -47,7 +47,9 @@ func buildRespContent(entry *userdocument.DocumentSearchResp) string {
 	}
 
 	item := `title: %s
-url: %s`
+url: %s
+
+`
 
 	sb := strings.Builder{}
 	for _, e := range entry.List {

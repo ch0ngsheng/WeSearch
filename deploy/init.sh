@@ -1,11 +1,12 @@
 #!/bin/bash
 
-# run as root as /tmp/deploy dir.
+# run as root within /tmp/deploy dir.
 
 echo "common"
 mkdir -p /home/wesearch
 cp -r /tmp/deploy/certs /home/wesearch
 cp -r /tmp/deploy/etc /home/wesearch
+mkdir -p /home/wesearch/{manager,userdoc,retrieve}/logs
 
 echo "mysql"
 mkdir -p /home/wesearch/mysql/{conf,data,log,init}

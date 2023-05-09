@@ -34,7 +34,7 @@ Kafka:
   ConsumerGroup: userdoc
 RetrieveRpcConf:
   NonBlock: false # 是否异步建立连接
-  Timeout: 4s # RPC请求超时
+  Timeout: 4000 # RPC请求超时，单位ms
   KeepaliveTime: 10s # gRPC内部最低10s
   Middlewares:
     Trace: true

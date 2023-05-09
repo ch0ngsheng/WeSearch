@@ -3,8 +3,11 @@ module chongsheng.art/wesearch
 go 1.20
 
 require (
+	github.com/PuerkitoBio/goquery v1.8.1
+	github.com/Shopify/sarama v1.38.1
 	github.com/elastic/go-elasticsearch/v8 v8.5.1-0.20230220130617-c22e0fca4f3b
 	github.com/golang/protobuf v1.5.3
+	github.com/pkg/errors v0.9.1
 	github.com/silenceper/wechat/v2 v2.1.4
 	github.com/zeromicro/go-zero v1.5.2
 	google.golang.org/grpc v1.54.0
@@ -12,8 +15,6 @@ require (
 )
 
 require (
-	github.com/PuerkitoBio/goquery v1.8.1 // indirect
-	github.com/Shopify/sarama v1.38.1 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bradfitz/gomemcache v0.0.0-20220106215444-fb4bf637b56d // indirect

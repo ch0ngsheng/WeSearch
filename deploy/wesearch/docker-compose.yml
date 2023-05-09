@@ -9,6 +9,7 @@ services:
       - "7001:7001"
     volumes:
       - /home/wesearch/etc:/app/etc
+      - /home/wesearch/manager/logs:/app/logs
       - /home/wesearch/certs:/app/certs
     depends_on:
       - userdoc
@@ -24,6 +25,7 @@ services:
         ipv4_address: 172.22.2.3
     volumes:
       - /home/wesearch/etc:/app/etc
+      - /home/wesearch/userdoc/logs:/app/logs
       - /home/wesearch/certs:/app/certs
     depends_on:
       - retrieve
@@ -34,6 +36,7 @@ services:
     container_name: retrieve
     volumes:
       - /home/wesearch/etc:/app/etc
+      - /home/wesearch/retrieve/logs:/app/logs
       - /home/wesearch/certs:/app/certs
 networks:
   wesearch_internal:

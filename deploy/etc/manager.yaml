@@ -17,6 +17,15 @@ WeChat:
   EncodingAESKey:
 
 UserDocRpcConf:
+  NonBlock: false # 是否异步建立连接
+  Timeout: 4000 # RPC请求超时，单位ms。微信要求5s有响应
+  KeepaliveTime: 10s # gRPC内部最低10s
+  Middlewares:
+    Trace: true
+    Duration: true # 请求处理时间
+    Prometheus: false
+    Breaker: true
+    Timeout: true # 限制RPC请求超时时间，阈值为上面的Timeout值
   Etcd:
     Hosts:
       - 1.etcd:2379
